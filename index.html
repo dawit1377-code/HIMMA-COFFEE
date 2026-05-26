@@ -12,7 +12,7 @@
         */
         :root {
             /* PASTE YOUR LATEST GOOGLE DEPLOYMENT URL HERE */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbzbLHEroN4PvES1WWW039EBPLSHr6hGRLq1vkWFMLjgSYrqEsyActBPGknipkRrGhDw/exec";
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbzmroX8Jypbj4cLKjTj3NsGmgarN-Y1SuhiJ6sTkzGf3l8dRzu4WFfKlVt_eWX3zkSl/exec";
             
             /* Hotel Name Parts */
             --hotel-en-1: "HIMMA";
@@ -243,9 +243,8 @@
 
             const filtered = this.data.filter(i => String(i.cat) === String(this.activeCat) && !i.hidden);
             document.getElementById('menuListing').innerHTML = filtered.map(i => {
-                const globalIdx = this.data.indexOf(i);
                 return `
-                <div class="card" onclick="APP.openDetail(${globalIdx})">
+                <div class="card" onclick="APP.openDetail('${i.id}')">
                     <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="food-info-area">
                         <div class="food-title">${isEn ? i.en : i.am}</div>
@@ -257,8 +256,9 @@
             this.renderAdmin();
         },
 
-        openDetail: function(idx) {
-            const item = this.data[idx];
+        openDetail: function(id) {
+            const item = this.data.find(i => String(i.id) === String(id));
+            if(!item) return;
             document.getElementById('modalImgHD').src = item.img || '';
             document.getElementById('modalTitle').innerText = this.lang === 'en' ? item.en : item.am;
             document.getElementById('modalIng').innerText = item.ing || '';
@@ -286,7 +286,7 @@
                         <input value="${i.am}" onchange="APP.data[${idx}].am=this.value" placeholder="AM Name">
                         <input value="${i.ing || ''}" onchange="APP.data[${idx}].ing=this.value" placeholder="Ingredients" style="font-size:11px;">
                         <select onchange="APP.data[${idx}].cat=this.value">
-                            ${this.cats.map(c => `<option value="${c.id}" ${c.id==i.cat?'selected':''}>${c.en}</option>`).join('')}
+                            ${this.cats.map(c => `<option value="${c.id}" ${String(c.id)===String(i.cat)?'selected':''}>${c.en}</option>`).join('')}
                         </select>
                         <input type="file" onchange="APP.updateItemImg(${idx}, this)" style="font-size:10px; border:none;">
                     </td>
@@ -349,7 +349,7 @@
         applyCatRename: function() { const c = this.cats.find(x => x.id == this.editId); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
         deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => c.id != id); this.render(); } },
         createNewCat: function() { this.cats.push({id:document.getElementById('nCatId').value, en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.closeModals(); this.render(); },
-        createNewItem: function() { this.data.push({id:Date.now(), cat:document.getElementById('nItemCat').value, en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.closeModals(); this.render(); },
+        createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:document.getElementById('nItemCat').value, en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         saveToCloud: async function() {
