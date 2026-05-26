@@ -8,7 +8,7 @@
     <style>
         :root {
             /* PASTE YOUR ACTIVE RE-DEPLOYED WEB APP LINK HERE */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbzP4Jt9I1UFryOsOJPZR3AMlcNMBlmIC2isQ02L4RA42YEtBJFSW93C70HpwISn8lGt/exec";
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbwzR7v0-BhpcCXYLjjHiadqaPKUt29CErxzaVgaHg0m5sFEEguKwie8aYYDSATqyun1/exec";
             
             --hotel-en-1: "HIMMA";
             --hotel-en-2: "COFFEE";
@@ -197,12 +197,10 @@
                 return;
             }
             
-            // Re-initialize tracking configuration limits properties parameters
             this.isDataReady = false;
             this.currentPercent = 1;
             this.startSmoothCountdown();
 
-            // Fire up standard aligned script handshake operation
             const scriptTag = document.createElement('script');
             scriptTag.src = baseUrl + (baseUrl.indexOf('?') >= 0 ? '&' : '?') + "callback=handleGoogleJSONP&_cache=" + new Date().getTime();
             scriptTag.onerror = function() {
@@ -229,7 +227,7 @@
                         this.hideLoader();
                     }
                 }
-            }, 20); // Smooth incremental updates
+            }, 20);
         },
 
         processIncomingData: function(j) {
@@ -262,12 +260,13 @@
             document.getElementById('callBtnText').innerText = isEn ? "Call To Order" : "ለማዘዝ ይደውሉ";
 
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
-                <div class="nav-item ${String(this.activeCat) === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${c.id}')">
+                <div class="nav-item ${String(this.activeCat).trim() === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${String(c.id).trim()}')">
                     <img src="${c.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
                     <p>${isEn ? c.en : c.am}</p>
                 </div>`).join('');
 
-            const filtered = this.data.filter(i => String(i.cat).trim() === String(this.activeCat) && !i.hidden);
+            // FIXED: Using type-safe string comparisons for IDs to make sure numbers match perfectly
+            const filtered = this.data.filter(i => String(i.cat).trim() === String(this.activeCat).trim() && !i.hidden);
             
             if (filtered.length === 0) {
                 document.getElementById('menuListing').innerHTML = `
@@ -304,8 +303,8 @@
                 <div class="cat-row">
                     <div class="cat-info"><span><b>${c.en}</b> / ${c.am}</span>
                         <div>
-                            <button onclick="APP.prepRename('${c.id}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename</button>
-                            <button onclick="APP.deleteCat('${c.id}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del</button>
+                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename</button>
+                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del</button>
                         </div>
                     </div>
                     <input type="file" onchange="APP.updateCatImg(${idx}, this)">
@@ -318,7 +317,7 @@
                         <input value="${i.am}" onchange="APP.data[${idx}].am=this.value" placeholder="AM Title">
                         <input value="${i.ing || ''}" onchange="APP.data[${idx}].ing=this.value" style="font-size:11px;" placeholder="Details">
                         <select onchange="APP.data[${idx}].cat=this.value">
-                            ${this.cats.map(c => `<option value="${c.id}" ${String(c.id).trim()===String(i.cat).trim()?'selected':''}>${c.en}</option>`).join('')}
+                            ${this.cats.map(c => `<option value="${String(c.id).trim()}" ${String(c.id).trim()===String(i.cat).trim()?'selected':''}>${c.en}</option>`).join('')}
                         </select>
                         <input type="file" onchange="APP.updateItemImg(${idx}, this)" style="font-size:10px; border:none; padding:0;">
                     </td>
@@ -328,7 +327,7 @@
                         <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">Del</button>
                     </td>
                 </tr>`).join('');
-            document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${c.id}">${c.en}</option>`).join('');
+            document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en}</option>`).join('');
         },
 
         verifyLogin: function() {
@@ -364,9 +363,9 @@
         handleImg: function(input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => this.imgTmp = e.target.result; r.readAsDataURL(input.files[0]); } },
         updateCatImg: function(idx, input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { this.cats[idx].img = e.target.result; }; r.readAsDataURL(input.files[0]); } },
         updateItemImg: function(idx, input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { this.data[idx].img = e.target.result; this.renderAdmin(); }; r.readAsDataURL(input.files[0]); } },
-        prepRename: function(id) { this.editId = id; const c = this.cats.find(x => x.id == id); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
-        applyCatRename: function() { const c = this.cats.find(x => x.id == this.editId); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
-        deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => c.id != id); this.render(); } },
+        prepRename: function(id) { this.editId = id; const c = this.cats.find(x => String(x.id).trim() == String(id).trim()); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
+        applyCatRename: function() { const c = this.cats.find(x => String(x.id).trim() == String(this.editId).trim()); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
+        deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
         createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value).trim(), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.imgTmp=''; this.closeModals(); this.render(); },
         createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value).trim(), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.imgTmp=''; this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
