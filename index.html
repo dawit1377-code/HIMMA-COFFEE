@@ -180,7 +180,6 @@
             const root = getComputedStyle(document.documentElement);
             document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
             
-            /* DYNAMIC FIX: Always fetch from the variable at the top of the file */
             const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             
             try {
