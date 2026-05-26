@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PASTE YOUR NEW RE-DEPLOYED WEB APP LINK HERE */
+            /* PASTE YOUR ACTIVE RE-DEPLOYED WEB APP LINK HERE */
             --google-sheet-url: "https://script.google.com/macros/s/AKfycbyZ7Ggxy-O8DipgEL7sBfjI7BdZoS-LwQfao4DgdM5tzWP6g1adZgWeSntVwcFGb6bW/exec";
             
             --hotel-en-1: "HIMMA";
@@ -33,11 +33,13 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--page-bg); color: #333; font-family: 'Poppins', 'Noto Sans Ethiopic', sans-serif; padding-bottom: 100px; }
         
-        #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; transition: opacity 0.4s ease; }
         .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--brand-primary); margin-bottom: 4px; }
         .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--header-bg); margin-bottom: 30px; }
         .spinner { width: 45px; height: 45px; border: 5px solid #eee; border-top: 5px solid var(--brand-primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
 
         .header { background: var(--header-bg); padding: 10px; display: flex; align-items: center; position: sticky; top: 0; z-index: 1000; height: 130px; }
         .logo-img { height: 80px; width: 80px; object-fit: contain; margin-right: 10px; flex-shrink: 0; }
@@ -84,7 +86,8 @@
     <h2 class="loader-welcome-title">Welcome To Himma Coffee</h2>
     <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ኮፊ በደህና መጡ</h3>
     <div class="spinner"></div>
-    <p id="loadText" style="margin-top:15px; font-size:14px; font-weight:600; color:var(--brand-primary);">Connecting to Menu Registry Spreadsheet...</p>
+    <div id="progressText" class="progress-text">1%</div>
+    <p id="loadText" style="margin-top:10px; font-size:13px; font-weight:600; color:#777;">Securing background connection traces...</p>
 </div>
 
 <header class="header">
@@ -170,6 +173,7 @@
 
     const APP = {
         data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null, cloudPassword: "00000",
+        isDataReady: false, currentPercent: 1,
 
         init: function() {
             const root = getComputedStyle(document.documentElement);
@@ -181,13 +185,41 @@
                 return;
             }
             
-            // Script integration sync
+            // Reset progressive tracker parameters
+            this.isDataReady = false;
+            this.currentPercent = 1;
+            this.startSmoothCountdown();
+
+            // Script network integration sync
             const scriptTag = document.createElement('script');
             scriptTag.src = baseUrl + (baseUrl.indexOf('?') >= 0 ? '&' : '?') + "callback=handleGoogleJSONP&_cache=" + new Date().getTime();
             scriptTag.onerror = function() {
                 document.getElementById('loadText').innerHTML = "<span style='color:red;'>Connection Error. Verify script setup.</span>";
             };
             document.body.appendChild(scriptTag);
+        },
+
+        startSmoothCountdown: function() {
+            const txt = document.getElementById('progressText');
+            
+            const interval = setInterval(() => {
+                // If backend data hasn't arrived yet, slow down near 85% to give it space
+                if (!this.isDataReady && this.currentPercent >= 85) {
+                    if (this.currentPercent < 95) {
+                        this.currentPercent += 1;
+                        if(txt) txt.innerText = this.currentPercent + "%";
+                    }
+                } else {
+                    // Normal smooth progressive incremental tick
+                    this.currentPercent += 1;
+                    if(txt) txt.innerText = this.currentPercent + "%";
+                    
+                    if (this.currentPercent >= 100) {
+                        clearInterval(interval);
+                        this.hideLoader();
+                    }
+                }
+            }, 20); // Fast, ultra-smooth 20ms steps
         },
 
         processIncomingData: function(j) {
@@ -198,12 +230,19 @@
             if (this.cats.length > 0) {
                 this.activeCat = String(this.cats[0].id).trim();
             }
-            this.hideLoader();
+            
+            // Flag that background sync complete, letting tracker surge smoothly to 100%
+            this.isDataReady = true;
         },
 
         hideLoader: function() { 
             const loader = document.getElementById('pageLoader');
-            if(loader) loader.style.display = 'none'; 
+            if(loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 400); // Clean visual fade out
+            }
             this.render(); 
         },
 
@@ -328,7 +367,7 @@
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         
         saveToCloud: function() {
-            const root = getComputedStyle(document.documentElement);
+            const root = getComputedStyleStyle(document.documentElement);
             const b = document.getElementById('cloudBtn'); 
             b.innerText = "SYNCING OVERRIDE...";
             
@@ -341,6 +380,12 @@
             setTimeout(() => {
                 alert("Data changes sent to cloud storage registry successfully!");
                 b.innerText = "💾 SYNC ALL CHANGES";
+                
+                const loader = document.getElementById('pageLoader');
+                if(loader) {
+                    loader.style.opacity = '1';
+                    loader.style.display = 'flex';
+                }
                 APP.init();
             }, 2500);
         },
