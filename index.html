@@ -297,7 +297,6 @@
         },
         closeDetail: function() { document.getElementById('itemDetailModal').style.display = 'none'; },
 
-        // FIXED: Re-engineered select output template to instantly map index tracking onto category values securely
         renderAdmin: function() {
             document.getElementById('adminCatList').innerHTML = this.cats.map((c, idx) => `
                 <div class="cat-row">
@@ -381,7 +380,13 @@
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         
+        // PERMANENT PROTECTION: Failsafe verification added to block empty/corrupt sync drops
         saveToCloud: function() {
+            if (!this.cats || this.cats.length === 0) {
+                alert("CRITICAL STOP: Local memory category array is blank! Sync canceled to safeguard your cloud database. Please refresh your browser window and log back in.");
+                return;
+            }
+            
             const root = getComputedStyle(document.documentElement);
             const b = document.getElementById('cloudBtn'); 
             b.innerText = "SYNCING OVERRIDE...";
