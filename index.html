@@ -36,14 +36,15 @@
             --brand-primary: #E56717;
             --phone-number: "+251954954591";
             --admin-user: "himma";
-            --admin-pass: "00000";
         }
 
         /* --- UI CORE --- */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--page-bg); color: #333; font-family: 'Poppins', 'Noto Sans Ethiopic', sans-serif; padding-bottom: 100px; }
         
-        #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--brand-primary); margin-bottom: 4px; }
+        .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--header-bg); margin-bottom: 30px; }
         .spinner { width: 45px; height: 45px; border: 5px solid #eee; border-top: 5px solid var(--brand-primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -91,8 +92,10 @@
 <body onclick="APP.closeOnOutside(event)">
 
 <div id="pageLoader">
+    <h2 class="loader-welcome-title">Welcome To Himma Coffee</h2>
+    <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ኮፊ በደህና መጡ</h3>
     <div class="spinner"></div>
-    <p id="loadText" style="margin-top:10px; font-size:12px; font-weight:600; color:var(--header-bg)">Connecting... 0%</p>
+    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg); letter-spacing: 0.5px;">Connecting... 0%</p>
 </div>
 
 <header class="header">
@@ -140,6 +143,14 @@
             <table><tbody id="adminItemBody"></tbody></table>
         </div>
     </div>
+    
+    <div class="admin-section">
+        <h4>3. Admin Security</h4>
+        <p style="font-size: 12px; margin-bottom: 8px; color:#666;">Change system login password securely:</p>
+        <input type="text" id="newPassInput" placeholder="Enter New Password" autocomplete="off">
+        <button id="passUpdateBtn" class="btn" style="background:#3498db; width:100%; margin-top:5px;" onclick="APP.updateSystemPassword()">🔒 UPDATE PASSWORD</button>
+    </div>
+    
     <button id="cloudBtn" onclick="APP.saveToCloud()" style="width:100%; padding:22px; background:#27ae60; color:white; border:none; border-radius:12px; font-weight:bold;">💾 SYNC ALL CHANGES</button>
 </div>
 
@@ -159,18 +170,19 @@
 <script>
     const APP = {
         data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null,
+        cloudPassword: "00000",
 
         init: async function() {
             const loadTxt = document.getElementById('loadText');
             loadTxt.innerText = "Connecting... 15%";
             
             const root = getComputedStyle(document.documentElement);
-            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
+            
+            const sheetUrl = "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
             
             try {
                 loadTxt.innerText = "Connecting... 40%";
-                // High Speed Fix: Removed ?t= timestamp to allow browser caching
                 const r = await fetch(sheetUrl); 
                 
                 loadTxt.innerText = "Connecting... 75%";
@@ -179,6 +191,11 @@
                 loadTxt.innerText = "Connecting... 95%";
                 this.data = j.items || [];
                 this.cats = j.cats || [];
+                
+                if (j.password) {
+                    this.cloudPassword = String(j.password).trim();
+                }
+                
                 if(this.cats.length > 0) this.activeCat = this.cats[0].id;
                 
                 this.hideLoader();
@@ -284,12 +301,37 @@
         verifyLogin: function() {
             const root = getComputedStyle(document.documentElement);
             const user = root.getPropertyValue('--admin-user').trim().replace(/"/g, '');
-            const pass = root.getPropertyValue('--admin-pass').trim().replace(/"/g, '');
-            if(document.getElementById('uIn').value === user && document.getElementById('pIn').value === pass){
+            
+            if(document.getElementById('uIn').value === user && document.getElementById('pIn').value === this.cloudPassword){
                 document.getElementById('adminDashboard').style.display='block';
                 document.getElementById('uIn').value = ""; document.getElementById('pIn').value = "";
                 this.closeModals();
             } else { alert("Login Error"); }
+        },
+
+        updateSystemPassword: async function() {
+            const newPass = document.getElementById('newPassInput').value.trim();
+            if(!newPass) { alert("Please type a valid password first!"); return; }
+            
+            const btn = document.getElementById('passUpdateBtn');
+            btn.innerText = "SAVING SECURITY KEY...";
+            
+            const sheetUrl = "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
+            
+            try {
+                await fetch(sheetUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ action: "update_password", newPassword: newPass })
+                });
+                alert("Password updated inside Cloud Registry successfully!");
+                this.cloudPassword = newPass;
+                document.getElementById('newPassInput').value = "";
+            } catch(e) {
+                alert("Failed to sync security configuration.");
+            } finally {
+                btn.innerText = "🔒 UPDATE PASSWORD";
+            }
         },
 
         setCat: function(id) { this.activeCat = id; this.render(); },
@@ -309,8 +351,7 @@
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         saveToCloud: async function() {
-            const root = getComputedStyle(document.documentElement);
-            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            const sheetUrl = "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
             const b = document.getElementById('cloudBtn'); b.innerText = "UPDATING...";
             try {
                 await fetch(sheetUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ items: this.data, cats: this.cats }) });
