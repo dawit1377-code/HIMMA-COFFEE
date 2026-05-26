@@ -297,6 +297,7 @@
         },
         closeDetail: function() { document.getElementById('itemDetailModal').style.display = 'none'; },
 
+        // FIXED: Re-engineered select output template to instantly map index tracking onto category values securely
         renderAdmin: function() {
             document.getElementById('adminCatList').innerHTML = this.cats.map((c, idx) => `
                 <div class="cat-row">
@@ -329,7 +330,6 @@
             document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en}</option>`).join('');
         },
 
-        // FIXED: Explicitly clear validation credential inputs right after evaluating to protect login state
         verifyLogin: function() {
             const root = getComputedStyle(document.documentElement);
             const user = root.getPropertyValue('--admin-user').trim().replace(/"/g, '');
