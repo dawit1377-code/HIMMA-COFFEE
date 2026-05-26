@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PASTE THE NEWLY COPIED /exec URL CAREFULLY BETWEEN THE QUOTES */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbz53Me2aPYN7MR0WaDYFJwsNagl-lCYb_u7L5bCXb5ee54yzXNn5q_4dmZ_k3_XLd4j/exec";
+            /* PASTE YOUR LATEST DEPLOYMENT WEB APP LINK HERE */
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbxoDxE6jD23puFW7TdWMaQBMPNx1Gejf24ypvh5UHcXUEAVbrfUou0sAGeBfI08EPh2/exec";
             
             --hotel-en-1: "HIMMA";
             --hotel-en-2: "COFFEE";
@@ -84,7 +84,7 @@
     <h2 class="loader-welcome-title">Welcome To Himma Coffee</h2>
     <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ኮፊ በደህና መጡ</h3>
     <div class="spinner"></div>
-    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg);">Syncing live configuration registry...</p>
+    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg);">Establishing Cross-Origin Sync Protocol...</p>
 </div>
 
 <header class="header">
@@ -153,34 +153,46 @@
 <div id="catModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><h3>New Category</h3><input type="text" id="nCatId" placeholder="ID"><input type="text" id="nCatEn"><input type="text" id="nCatAm"><input type="file" onchange="APP.handleImg(this)"><button onclick="APP.createNewCat()" class="btn" style="background:#8e44ad; width:100%;">CREATE</button></div></div>
 <div id="itemModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><h3>Add New Item</h3><select id="nItemCat"></select><input type="text" id="nItemEn" placeholder="EN"><input type="text" id="nItemAm" placeholder="AM"><input type="text" id="nItemIng" placeholder="Ingredients"><input type="text" id="nItemPrice" placeholder="Price"><input type="file" onchange="APP.handleImg(this)"><button onclick="APP.createNewItem()" class="btn" style="background:#27ae60; width:100%;">ADD TO MENU</button></div></div>
 
+<form id="corsBypassForm" method="POST" target="bypassFrame" style="display:none;">
+    <input type="hidden" name="jsonData" id="corsPayloadField">
+</form>
+<iframe name="bypassFrame" style="display:none;" id="bypassFrame"></iframe>
+
 <script>
+    // Global router callback hook mapped directly to system registry context
+    function handleGoogleJSONP(response) {
+        APP.processIncomingData(response);
+    }
+
     const APP = {
         data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null, cloudPassword: "00000",
 
-        init: async function() {
+        init: function() {
             const root = getComputedStyle(document.documentElement);
             document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
-            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            const baseUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             
-            try {
-                // High-performance clean fetching execution block
-                const r = await fetch(sheetUrl, { method: 'GET', redirect: 'follow' });
-                if (!r.ok) throw new Error("Server response failed with status: " + r.status);
-                const j = await r.json();
-                
-                this.data = j.items || [];
-                this.cats = j.cats || [];
-                if (j.password) this.cloudPassword = String(j.password).trim();
-                
-            } catch(e) { 
-                alert("DATABASE READ WARNING:\nBrowser data sync could not read Google sheets directly.\n\nTroubleshooting details: " + e.message);
-            } finally {
-                if (!this.cats || this.cats.length === 0) {
-                    this.cats = [{ id: "1", en: "Menu List", am: "የምግብ ዝርዝር", img: "" }];
-                }
-                if (this.cats.length > 0) this.activeCat = String(this.cats[0].id);
-                this.hideLoader();
+            // Build dynamic target using JSONP tracking to secure raw connection data
+            const scriptTag = document.createElement('script');
+            scriptTag.src = baseUrl + (baseUrl.indexOf('?') >= 0 ? '&' : '?') + "callback=handleGoogleJSONP&ts=" + new Date().getTime();
+            scriptTag.id = "jsonpSyncTag";
+            scriptTag.onerror = function() {
+                alert("CRITICAL SYNC ERROR:\nSystem could not reach the sheet server registry.");
+                APP.hideLoader();
+            };
+            document.body.appendChild(scriptTag);
+        },
+
+        processIncomingData: function(j) {
+            this.data = j.items || [];
+            this.cats = j.cats || [];
+            if (j.password) this.cloudPassword = String(j.password).trim();
+            
+            if (!this.cats || this.cats.length === 0) {
+                this.cats = [{ id: "1", en: "Menu List", am: "የምግብ ዝርዝር", img: "" }];
             }
+            if (this.cats.length > 0) this.activeCat = String(this.cats[0].id);
+            this.hideLoader();
         },
 
         hideLoader: function() { 
@@ -277,16 +289,19 @@
             } else { alert("Login Error"); }
         },
 
-        updateSystemPassword: async function() {
+        updateSystemPassword: function() {
             const newPass = document.getElementById('newPassInput').value.trim();
             if(!newPass) return;
+            
             const root = getComputedStyle(document.documentElement);
-            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
-            try {
-                await fetch(sheetUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "update_password", newPassword: newPass }) });
-                alert("Password updated!");
-                this.cloudPassword = newPass;
-            } catch(e) { alert("Failed to sync security configuration."); }
+            const form = document.getElementById('corsBypassForm');
+            form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            
+            document.getElementById('corsPayloadField').value = JSON.stringify({ action: "update_password", newPassword: newPass });
+            form.submit();
+            
+            alert("Password Sync Request Submitted!");
+            this.cloudPassword = newPass;
         },
 
         setCat: function(id) { this.activeCat = String(id); this.render(); },
@@ -305,14 +320,30 @@
         createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
-        saveToCloud: async function() {
+        
+        saveToCloud: function() {
             const root = getComputedStyle(document.documentElement);
-            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
-            const b = document.getElementById('cloudBtn'); b.innerText = "UPDATING...";
-            try {
-                await fetch(sheetUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ items: this.data, cats: this.cats }) });
-                alert("Saved Successfully!"); this.init();
-            } catch(e) { alert("Error saving data patterns."); } finally { b.innerText = "💾 SYNC ALL CHANGES"; }
+            const b = document.getElementById('cloudBtn'); 
+            b.innerText = "SYNCING OVERRIDE...";
+            
+            const form = document.getElementById('corsBypassForm');
+            form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            
+            document.getElementById('corsPayloadField').value = JSON.stringify({ items: this.data, cats: this.cats });
+            form.submit();
+            
+            setTimeout(() => {
+                alert("Data changes sent to cloud storage registry successfully!");
+                b.innerText = "💾 SYNC ALL CHANGES";
+                
+                // Clear out script tag context and pull fresh data trace
+                const oldTag = document.getElementById('jsonpSyncTag');
+                if (oldTag) oldTag.remove();
+                
+                const loader = document.getElementById('pageLoader');
+                if(loader) loader.style.display = 'flex';
+                APP.init();
+            }, 2500);
         },
         closeOnOutside: function(e) { if(e.target.className==='overlay') this.closeModals(); }
     };
