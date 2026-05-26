@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HIMMA COFFEE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&family=Noto+Sans+Ethiopic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
         /* ============================================================
            1. MASTER CONTROL CENTER
@@ -12,7 +12,7 @@
         */
         :root {
             /* PASTE YOUR LATEST GOOGLE DEPLOYMENT URL HERE */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbzmroX8Jypbj4cLKjTj3NsGmgarN-Y1SuhiJ6sTkzGf3l8dRzu4WFfKlVt_eWX3zkSl/exec";
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbyP6lJ7NNhDFyHUlHaOTHHNhxGIn5gWSsV2MJ68DEnfWf0ovUwdXM0p_GS9hclg9SOc/exec";
             
             /* Hotel Name Parts */
             --hotel-en-1: "HIMMA";
@@ -196,13 +196,20 @@
                 if (j.password) {
                     this.cloudPassword = String(j.password).trim();
                 }
-                
-                if(this.cats.length > 0) this.activeCat = this.cats[0].id;
-                
-                this.hideLoader();
             } catch(e) { 
-                console.error(e);
-                this.hideLoader(); 
+                console.error("Connection failed, loading with protection fallbacks:", e);
+            } finally {
+                // FALLBACK SAFETY NET: If data is blank, inject structural defaults so UI works
+                if (!this.cats || this.cats.length === 0) {
+                    this.cats = [
+                        { id: "hot_drinks", en: "Hot Drinks", am: "ትኩስ መጠጦች", img: "" },
+                        { id: "fast_food", en: "Fast Food", am: "ፈጣን ምግቦች", img: "" }
+                    ];
+                }
+                if (!this.activeCat && this.cats.length > 0) {
+                    this.activeCat = this.cats[0].id;
+                }
+                this.hideLoader();
             }
         },
 
@@ -236,23 +243,30 @@
             document.getElementById('loginWelcomeText').innerText = isEn ? `Welcome to "${hEn}"` : `እንኳን ወደ "${hAm}" በደህና መጡ`;
 
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
-                <div class="nav-item ${this.activeCat == c.id ? 'active' : ''}" onclick="APP.setCat('${c.id}')">
+                <div class="nav-item ${String(this.activeCat) === String(c.id) ? 'active' : ''}" onclick="APP.setCat('${c.id}')">
                     <img src="${c.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
                     <p>${isEn ? c.en : c.am}</p>
                 </div>`).join('');
 
             const filtered = this.data.filter(i => String(i.cat) === String(this.activeCat) && !i.hidden);
-            document.getElementById('menuListing').innerHTML = filtered.map(i => {
-                return `
-                <div class="card" onclick="APP.openDetail('${i.id}')">
-                    <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="food-info-area">
-                        <div class="food-title">${isEn ? i.en : i.am}</div>
-                        <div class="food-ing">${i.ing || ''}</div>
-                        <div class="price-tag">${i.price} ETB</div>
-                    </div>
+            
+            if (filtered.length === 0) {
+                document.getElementById('menuListing').innerHTML = `
+                <div style="text-align:center; padding: 40px 20px; color: #888;">
+                    <p style="font-size:16px;">${isEn ? 'No items found in this category.' : 'በዚህ ምድብ ውስጥ ምንም ዕቃዎች አልተገኙም።'}</p>
+                    <p style="font-size:12px; margin-top:5px; opacity:0.7;">${isEn ? 'Log in via top-left menu to add food items.' : 'ምግቦችን ለመጨመር ከላይ በግራ በኩል ባለው ማውጫ ይግቡ።'}</p>
                 </div>`;
-            }).join('');
+            } else {
+                document.getElementById('menuListing').innerHTML = filtered.map(i => `
+                    <div class="card" onclick="APP.openDetail('${i.id}')">
+                        <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
+                        <div class="food-info-area">
+                            <div class="food-title">${isEn ? i.en : i.am}</div>
+                            <div class="food-ing">${i.ing || ''}</div>
+                            <div class="price-tag">${i.price} ETB</div>
+                        </div>
+                    </div>`).join('');
+            }
             this.renderAdmin();
         },
 
