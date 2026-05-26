@@ -8,7 +8,7 @@
     <style>
         :root {
             /* PASTE YOUR ACTIVE RE-DEPLOYED WEB APP LINK HERE */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbwtnBbKPoDM2LhVelwwdOr7o3DQI8ZOgfyq51GuK0VOc8Wj_dSAAdD1VNJRCyI5Mt7i/exec";
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbzP4Jt9I1UFryOsOJPZR3AMlcNMBlmIC2isQ02L4RA42YEtBJFSW93C70HpwISn8lGt/exec";
             
             --hotel-en-1: "HIMMA";
             --hotel-en-2: "COFFEE";
@@ -30,11 +30,11 @@
             --admin-user: "himma";
         }
 
-        /* Base Resets */
+        /* Structural Baseline Layout Resets */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--page-bg); color: #333; font-family: 'Poppins', 'Noto Sans Ethiopic', sans-serif; padding-bottom: 100px; }
         
-        /* Isolated App Loader Overlay */
+        /* Isolated App Loading Layer Layout */
         #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; transition: opacity 0.4s ease; }
         .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--brand-primary); margin-bottom: 4px; }
         .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--header-bg); margin-bottom: 30px; }
@@ -42,7 +42,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
 
-        /* Navigation Header Blocks */
+        /* Navigation Header Matrix Structure */
         .header { background: var(--header-bg); padding: 10px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; height: 130px; }
         .header-left-menu { cursor: pointer; font-size: 28px; padding: 10px; color: white; width: 50px; flex-shrink: 0; }
         .logo-container-block { display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; flex-shrink: 0; margin-right: 10px; }
@@ -54,14 +54,14 @@
         .w3 { color: var(--word-3-color); }
         .lang-btn-style { background: white; color: var(--header-bg); border: none; padding: 10px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; flex-shrink: 0; font-size: 13px; }
         
-        /* Category Bar Scroller Layout */
+        /* Category Row Slider Layout System */
         .nav-bar { display: flex; overflow-x: auto; padding: 15px 10px; background: var(--nav-bg-color); position: sticky; top: 130px; z-index: 900; border-bottom: 1px solid #eee; min-height: 195px; scrollbar-width: none; gap: 15px; }
         .nav-bar::-webkit-scrollbar { display: none; }
         .nav-item { text-align: center; min-width: 140px; opacity: 0.5; cursor: pointer; flex-shrink: 0; border-bottom: 4px solid transparent; padding-bottom: 8px; }
         .nav-item.active { opacity: 1; font-weight: bold; color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
         .nav-item img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
 
-        /* Grid Containment For Menu Item Listing */
+        /* Unified Container Configurations */
         .container { padding: 15px; width: 100%; max-width: 100%; display: block; box-sizing: border-box; }
         .card { display: flex; align-items: flex-start; background: #ffffff; border-radius: 12px; margin-bottom: 15px; padding: 12px; border: 1px solid #f0f0f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; cursor: pointer; width: 100%; box-sizing: border-box; } 
         .food-img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; margin-right: 15px; flex-shrink: 0; }
@@ -70,16 +70,16 @@
         .food-ing { font-size: 13px; color: var(--ing-color); font-style: italic; line-height: 1.3; word-wrap: break-word; margin-bottom: 6px; }
         .price-tag { font-weight: bold; color: var(--price-color); font-size: 17px; }
 
-        /* Unified Layout Overlays */
+        /* Overlay System Overwrites */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 4000; align-items: center; justify-content: center; padding: 15px; }
         .modal { background: #ffffff; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px; position: relative; box-sizing: border-box; }
         #modalImgHD { width: 100%; max-height: 50vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; display: block; }
         .close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #000000; z-index: 10; }
 
-        /* Fixed Sticky Order Calling Control */
+        /* Fixed Footer Ordering Button Layer */
         .call-order-btn { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--call-btn-color); color: #ffffff; padding: 16px 35px; border-radius: 50px; text-decoration: none; z-index: 2000; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); white-space: nowrap; }
 
-        /* Separate Isolated Admin Matrix */
+        /* Admin Matrix Core Structural Rules */
         #adminDashboard { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 3000; padding: 15px; overflow-y: auto; box-sizing: border-box; }
         .admin-section { border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 25px; background: #fafafa; }
         .btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: #ffffff; text-align: center; font-size: 14px; margin-top: 10px; }
@@ -102,4 +102,302 @@
 </div>
 
 <header class="header">
-    
+    <div class="header-left-menu" onclick="APP.showLogin(event)">☰</div>
+    <div id="logoContainer" class="logo-container-block">
+        <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex'">
+        <div id="logoFallback" style="display:none; height:70px; width:70px; background: rgba(255,255,255,0.1); border-radius: 50%; align-items: center; justify-content: center; font-size: 30px; border: 2px dashed rgba(255,255,255,0.3);">🍔</div>
+    </div>
+    <div class="header-center-area">
+        <h1 id="mainTitle"><span class="w1" id="w1"></span> <span class="w2" id="w2"></span> <span class="w3" id="w3"></span></h1>
+        <div id="subTitle" style="font-size:12px; font-weight:bold; letter-spacing:3px; color:#ffffff; margin-top: 2px;">MENU</div>
+    </div>
+    <button class="lang-btn-style" onclick="APP.toggleLang()">EN/አማ</button>
+</header>
+
+<nav class="nav-bar" id="categoryNav"></nav>
+<div class="container" id="menuListing"></div>
+
+<div id="itemDetailModal" class="overlay" onclick="APP.closeDetail()">
+    <div class="modal" onclick="event.stopPropagation()">
+        <span class="close-x" onclick="APP.closeDetail()">&times;</span>
+        <img id="modalImgHD" src="">
+        <h2 id="modalTitle" style="color:var(--brand-primary);"></h2>
+        <p id="modalIng" style="color:var(--ing-color); font-style:italic; margin: 10px 0;"></p>
+        <div id="modalPrice" style="color:var(--price-color); font-size:24px; font-weight:bold; border-top:1px solid #eee; padding-top:10px;"></div>
+    </div>
+</div>
+
+<a href="#" id="callLink" class="call-order-btn">📞 <span id="callBtnText"></span></a>
+
+<div id="adminDashboard">
+    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--header-bg); padding:20px; color:white; border-radius:12px; margin-bottom: 20px;">
+        <h3 style="margin:0;">DIBORA MANAGER</h3>
+        <button onclick="APP.closeAdmin()" style="color:white; border:none; background:none; font-size:40px; cursor:pointer; line-height:1;">&times;</button>
+    </div>
+    <div class="admin-section">
+        <h4>1. Category Management</h4>
+        <div id="adminCatList"></div>
+        <button class="btn" style="background:#8e44ad;" onclick="APP.openModal('catModal')">+ ADD NEW CATEGORY</button>
+    </div>
+    <div class="admin-section">
+        <h4>2. Menu Items Management</h4>
+        <button class="btn" style="background:#27ae60; margin-bottom:20px;" onclick="APP.openModal('itemModal')">+ ADD NEW FOOD ITEM</button>
+        <div style="overflow-x:auto; width:100%;">
+            <table><tbody id="adminItemBody"></tbody></table>
+        </div>
+    </div>
+    <div class="admin-section">
+        <h4>3. Admin Security</h4>
+        <input type="text" id="newPassInput" placeholder="Enter New Password">
+        <button id="passUpdateBtn" class="btn" style="background:#3498db;" onclick="APP.updateSystemPassword()">🔒 UPDATE PASSWORD</button>
+    </div>
+    <button id="cloudBtn" onclick="APP.saveToCloud()" style="width:100%; padding:22px; background:#27ae60; color:white; border:none; border-radius:12px; font-weight:bold; font-size:16px; cursor:pointer; margin-top:20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">💾 SYNC ALL CHANGES</button>
+</div>
+
+<div id="loginOverlay" class="overlay">
+    <div class="modal" onclick="event.stopPropagation()" style="text-align:center;">
+        <span class="close-x" onclick="APP.closeModals()">&times;</span>
+        <h2 style="margin-bottom:15px; color:var(--header-bg); font-size:22px;">System Authentication</h2>
+        <input type="text" id="uIn" placeholder="User">
+        <input type="password" id="pIn" placeholder="Pass">
+        <button onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); margin-top:15px;">LOGIN</button>
+    </div>
+</div>
+
+<div id="editCatModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3>Rename Category</h3><input type="text" id="eCatEn"><input type="text" id="eCatAm"><button onclick="APP.applyCatRename()" class="btn" style="background:#27ae60;">SAVE RENAME</button></div></div>
+<div id="catModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3>New Category</h3><input type="text" id="nCatId" placeholder="Category Unique ID (e.g., 5)"><input type="text" id="nCatEn" placeholder="English Title"><input type="text" id="nCatAm" placeholder="Amharic Title"><label style="font-size:12px; margin-top:5px; display:block; color:#666;">Category Icon Image File:</label><input type="file" onchange="APP.handleImg(this)"><button onclick="APP.createNewCat()" class="btn" style="background:#8e44ad;">CREATE CATEGORY</button></div></div>
+<div id="itemModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3>Add New Item</h3><select id="nItemCat"></select><input type="text" id="nItemEn" placeholder="Food English Title"><input type="text" id="nItemAm" placeholder="Food Amharic Title"><input type="text" id="nItemIng" placeholder="Ingredients/Description"><input type="text" id="nItemPrice" placeholder="Price Amount Only (e.g. 250)"><label style="font-size:12px; margin-top:5px; display:block; color:#666;">Food Display Image File:</label><input type="file" onchange="APP.handleImg(this)"><button onclick="APP.createNewItem()" class="btn" style="background:#27ae60;">ADD TO MENU LIST</button></div></div>
+
+<form id="corsBypassForm" method="POST" target="bypassFrame" style="display:none;">
+    <input type="hidden" name="jsonData" id="corsPayloadField">
+</form>
+<iframe name="bypassFrame" style="display:none;" id="bypassFrame"></iframe>
+
+<script>
+    // Universal Global JSONP Matrix Signal Interceptor
+    window.handleGoogleJSONP = function(response) {
+        if (response && response.status !== "error") {
+            APP.processIncomingData(response);
+        } else {
+            document.getElementById('loadText').innerHTML = "<span style='color:red;'>Sheet Response Interrupted. Check Script Deployment.</span>";
+        }
+    };
+
+    const APP = {
+        data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null, cloudPassword: "00000",
+        isDataReady: false, currentPercent: 1,
+
+        init: function() {
+            const root = getComputedStyle(document.documentElement);
+            document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
+            
+            let baseUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            if (!baseUrl || baseUrl.includes("YOUR_NEW_EXEC_URL_HERE")) {
+                document.getElementById('loadText').innerText = "Paste your active Web App script URL into Line 14 of index.html";
+                return;
+            }
+            
+            // Re-initialize tracking configuration limits properties parameters
+            this.isDataReady = false;
+            this.currentPercent = 1;
+            this.startSmoothCountdown();
+
+            // Fire up standard aligned script handshake operation
+            const scriptTag = document.createElement('script');
+            scriptTag.src = baseUrl + (baseUrl.indexOf('?') >= 0 ? '&' : '?') + "callback=handleGoogleJSONP&_cache=" + new Date().getTime();
+            scriptTag.onerror = function() {
+                document.getElementById('loadText').innerHTML = "<span style='color:red;'>Connection Error. Verify script setup.</span>";
+            };
+            document.body.appendChild(scriptTag);
+        },
+
+        startSmoothCountdown: function() {
+            const txt = document.getElementById('progressText');
+            
+            const interval = setInterval(() => {
+                if (!this.isDataReady && this.currentPercent >= 85) {
+                    if (this.currentPercent < 95) {
+                        this.currentPercent += 1;
+                        if(txt) txt.innerText = this.currentPercent + "%";
+                    }
+                } else {
+                    this.currentPercent += 1;
+                    if(txt) txt.innerText = this.currentPercent + "%";
+                    
+                    if (this.currentPercent >= 100) {
+                        clearInterval(interval);
+                        this.hideLoader();
+                    }
+                }
+            }, 20); // Smooth incremental updates
+        },
+
+        processIncomingData: function(j) {
+            this.data = j.items || [];
+            this.cats = j.cats || [];
+            if (j.password) this.cloudPassword = String(j.password).trim();
+            
+            if (this.cats.length > 0 && !this.activeCat) {
+                this.activeCat = String(this.cats[0].id).trim();
+            }
+            this.isDataReady = true;
+        },
+
+        hideLoader: function() { 
+            const loader = document.getElementById('pageLoader');
+            if(loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 400);
+            }
+            this.render(); 
+        },
+
+        render: function() {
+            const isEn = this.lang === 'en';
+            const root = getComputedStyle(document.documentElement);
+            
+            document.getElementById('w1').innerText = isEn ? root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, '');
+            document.getElementById('w2').innerText = isEn ? root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
+            document.getElementById('w3').innerText = isEn ? root.getPropertyValue('--hotel-en-3').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-3').trim().replace(/"/g, '');
+            document.getElementById('callBtnText').innerText = isEn ? "Call To Order" : "ለማዘዝ ይደውሉ";
+
+            document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
+                <div class="nav-item ${String(this.activeCat) === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${c.id}')">
+                    <img src="${c.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
+                    <p>${isEn ? c.en : c.am}</p>
+                </div>`).join('');
+
+            const filtered = this.data.filter(i => String(i.cat).trim() === String(this.activeCat) && !i.hidden);
+            
+            if (filtered.length === 0) {
+                document.getElementById('menuListing').innerHTML = `
+                <div style="text-align:center; padding: 40px 20px; color: #888; width:100%;">
+                    <p style="font-size:16px;">${isEn ? 'No items found under this category right now.' : 'በዚህ ምድብ ውስጥ በአሁኑ ጊዜ ምንም ዕቃዎች አልተገኙም።'}</p>
+                </div>`;
+            } else {
+                document.getElementById('menuListing').innerHTML = filtered.map(i => `
+                    <div class="card" onclick="APP.openDetail('${i.id}')">
+                        <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
+                        <div class="food-info-area">
+                            <div class="food-title">${isEn ? i.en : i.am}</div>
+                            <div class="food-ing">${i.ing || ''}</div>
+                            <div class="price-tag">${i.price} ETB</div>
+                        </div>
+                    </div>`).join('');
+            }
+            this.renderAdmin();
+        },
+
+        openDetail: function(id) {
+            const item = this.data.find(i => String(i.id) === String(id));
+            if(!item) return;
+            document.getElementById('modalImgHD').src = item.img || '';
+            document.getElementById('modalTitle').innerText = this.lang === 'en' ? item.en : item.am;
+            document.getElementById('modalIng').innerText = item.ing || '';
+            document.getElementById('modalPrice').innerText = item.price + " ETB";
+            document.getElementById('itemDetailModal').style.display = 'flex';
+        },
+        closeDetail: function() { document.getElementById('itemDetailModal').style.display = 'none'; },
+
+        renderAdmin: function() {
+            document.getElementById('adminCatList').innerHTML = this.cats.map((c, idx) => `
+                <div class="cat-row">
+                    <div class="cat-info"><span><b>${c.en}</b> / ${c.am}</span>
+                        <div>
+                            <button onclick="APP.prepRename('${c.id}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename</button>
+                            <button onclick="APP.deleteCat('${c.id}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del</button>
+                        </div>
+                    </div>
+                    <input type="file" onchange="APP.updateCatImg(${idx}, this)">
+                </div>`).join('');
+
+            document.getElementById('adminItemBody').innerHTML = this.data.map((i, idx) => `
+                <tr style="${i.hidden ? 'opacity:0.3' : ''}">
+                    <td>
+                        <input value="${i.en}" onchange="APP.data[${idx}].en=this.value" placeholder="EN Title">
+                        <input value="${i.am}" onchange="APP.data[${idx}].am=this.value" placeholder="AM Title">
+                        <input value="${i.ing || ''}" onchange="APP.data[${idx}].ing=this.value" style="font-size:11px;" placeholder="Details">
+                        <select onchange="APP.data[${idx}].cat=this.value">
+                            ${this.cats.map(c => `<option value="${c.id}" ${String(c.id).trim()===String(i.cat).trim()?'selected':''}>${c.en}</option>`).join('')}
+                        </select>
+                        <input type="file" onchange="APP.updateItemImg(${idx}, this)" style="font-size:10px; border:none; padding:0;">
+                    </td>
+                    <td style="width:100px;"><input type="text" class="price-box" value="${i.price}" onchange="APP.data[${idx}].price=this.value"></td>
+                    <td style="width:70px; text-align:right;">
+                        <button onclick="APP.toggleHide(${idx})" style="background:#555; color:white; border:none; padding:8px; width:100%; margin-bottom:5px; border-radius:4px; cursor:pointer;">Hide</button>
+                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">Del</button>
+                    </td>
+                </tr>`).join('');
+            document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${c.id}">${c.en}</option>`).join('');
+        },
+
+        verifyLogin: function() {
+            const root = getComputedStyle(document.documentElement);
+            const user = root.getPropertyValue('--admin-user').trim().replace(/"/g, '');
+            if(document.getElementById('uIn').value === user && document.getElementById('pIn').value === this.cloudPassword){
+                document.getElementById('adminDashboard').style.display='block';
+                this.closeModals();
+            } else { alert("Login Error"); }
+        },
+
+        updateSystemPassword: function() {
+            const newPass = document.getElementById('newPassInput').value.trim();
+            if(!newPass) return;
+            
+            const root = getComputedStyle(document.documentElement);
+            const form = document.getElementById('corsBypassForm');
+            form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            
+            document.getElementById('corsPayloadField').value = JSON.stringify({ action: "update_password", newPassword: newPass });
+            form.submit();
+            
+            alert("Password Sync Request Submitted!");
+            this.cloudPassword = newPass;
+        },
+
+        setCat: function(id) { this.activeCat = String(id).trim(); this.render(); },
+        toggleLang: function() { this.lang = (this.lang === 'en' ? 'am' : 'en'); this.render(); },
+        showLogin: function(e) { e.stopPropagation(); document.getElementById('loginOverlay').style.display='flex'; },
+        closeAdmin: function() { document.getElementById('adminDashboard').style.display='none'; },
+        closeModals: function() { document.querySelectorAll('.overlay').forEach(o => o.style.display='none'); },
+        openModal: function(id) { document.getElementById(id).style.display='flex'; },
+        handleImg: function(input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => this.imgTmp = e.target.result; r.readAsDataURL(input.files[0]); } },
+        updateCatImg: function(idx, input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { this.cats[idx].img = e.target.result; }; r.readAsDataURL(input.files[0]); } },
+        updateItemImg: function(idx, input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { this.data[idx].img = e.target.result; this.renderAdmin(); }; r.readAsDataURL(input.files[0]); } },
+        prepRename: function(id) { this.editId = id; const c = this.cats.find(x => x.id == id); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
+        applyCatRename: function() { const c = this.cats.find(x => x.id == this.editId); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
+        deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => c.id != id); this.render(); } },
+        createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value).trim(), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.imgTmp=''; this.closeModals(); this.render(); },
+        createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value).trim(), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.imgTmp=''; this.closeModals(); this.render(); },
+        toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
+        deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
+        
+        saveToCloud: function() {
+            const root = getComputedStyle(document.documentElement);
+            const b = document.getElementById('cloudBtn'); 
+            b.innerText = "SYNCING OVERRIDE...";
+            
+            const form = document.getElementById('corsBypassForm');
+            form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            
+            document.getElementById('corsPayloadField').value = JSON.stringify({ items: this.data, cats: this.cats });
+            form.submit();
+            
+            setTimeout(() => {
+                alert("Data changes sent to cloud storage registry successfully!");
+                b.innerText = "💾 SYNC ALL CHANGES";
+                
+                const loader = document.getElementById('pageLoader');
+                if(loader) {
+                    loader.style.opacity = '1';
+                    loader.style.display = 'flex';
+                }
+                APP.init();
+            }, 2500);
+        },
+        closeOnOutside: function(e) { if(e.target.className==='overlay') this.closeModals(); }
+    };
+    window.onload = () => APP.init();
+</script>
+</body>
+</html>
