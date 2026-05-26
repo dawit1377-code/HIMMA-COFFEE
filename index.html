@@ -11,6 +11,7 @@
            ============================================================
         */
         :root {
+            /* PASTE YOUR LATEST GOOGLE DEPLOYMENT URL HERE */
             --google-sheet-url: "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
             
             /* Hotel Name Parts */
@@ -179,7 +180,8 @@
             const root = getComputedStyle(document.documentElement);
             document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
             
-            const sheetUrl = "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
+            /* DYNAMIC FIX: Always fetch from the variable at the top of the file */
+            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             
             try {
                 loadTxt.innerText = "Connecting... 40%";
@@ -316,7 +318,8 @@
             const btn = document.getElementById('passUpdateBtn');
             btn.innerText = "SAVING SECURITY KEY...";
             
-            const sheetUrl = "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
+            const root = getComputedStyle(document.documentElement);
+            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             
             try {
                 await fetch(sheetUrl, {
@@ -351,7 +354,8 @@
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         saveToCloud: async function() {
-            const sheetUrl = "https://script.google.com/macros/s/AKfycbwJj-hkKuGuJ8tA3H7EKdk55CLz20IBK-pwjEauiyE3dTiWbUr6rUadrMBG4-w7eycK/exec";
+            const root = getComputedStyle(document.documentElement);
+            const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             const b = document.getElementById('cloudBtn'); b.innerText = "UPDATING...";
             try {
                 await fetch(sheetUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ items: this.data, cats: this.cats }) });
