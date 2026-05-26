@@ -10,6 +10,11 @@
             /* PASTE YOUR ACTIVE RE-DEPLOYED WEB APP LINK HERE */
             --google-sheet-url: "https://script.google.com/macros/s/AKfycbwzR7v0-BhpcCXYLjjHiadqaPKUt29CErxzaVgaHg0m5sFEEguKwie8aYYDSATqyun1/exec";
             
+            /* --- LOADING PAGE STYLE CONFIGURATIONS --- */
+            --welcome-title-color: #E56717;
+            --welcome-subtitle-color: #564C4D;
+            
+            /* --- GLOBAL INTERFACE THEME STYLES --- */
             --hotel-en-1: "HIMMA";
             --hotel-en-2: "COFFEE";
             --hotel-en-3: ""; 
@@ -36,8 +41,8 @@
         
         /* Isolated App Loading Layer Layout */
         #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; transition: opacity 0.4s ease; }
-        .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--brand-primary); margin-bottom: 4px; }
-        .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--header-bg); margin-bottom: 30px; }
+        .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--welcome-title-color); margin-bottom: 4px; }
+        .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--welcome-subtitle-color); margin-bottom: 30px; }
         .spinner { width: 45px; height: 45px; border: 5px solid #eee; border-top: 5px solid var(--brand-primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
@@ -98,7 +103,6 @@
     <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ኮፊ በደህና መጡ</h3>
     <div class="spinner"></div>
     <div id="progressText" class="progress-text">1%</div>
-    <p id="loadText" style="margin-top:10px; font-size:13px; font-weight:600; color:#777;">Securing background connection traces...</p>
 </div>
 
 <header class="header">
@@ -158,8 +162,8 @@
     <div class="modal" onclick="event.stopPropagation()" style="text-align:center;">
         <span class="close-x" onclick="APP.closeModals()">&times;</span>
         <h2 style="margin-bottom:15px; color:var(--header-bg); font-size:22px;">System Authentication</h2>
-        <input type="text" id="uIn" placeholder="User">
-        <input type="password" id="pIn" placeholder="Pass">
+        <input type="text" id="uIn" placeholder="User" autocomplete="off">
+        <input type="password" id="pIn" placeholder="Pass" autocomplete="off">
         <button onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); margin-top:15px;">LOGIN</button>
     </div>
 </div>
@@ -179,7 +183,7 @@
         if (response && response.status !== "error") {
             APP.processIncomingData(response);
         } else {
-            document.getElementById('loadText').innerHTML = "<span style='color:red;'>Sheet Response Interrupted. Check Script Deployment.</span>";
+            console.error("Sheet Response Interrupted");
         }
     };
 
@@ -193,7 +197,6 @@
             
             let baseUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             if (!baseUrl || baseUrl.includes("YOUR_NEW_EXEC_URL_HERE")) {
-                document.getElementById('loadText').innerText = "Paste your active Web App script URL into Line 14 of index.html";
                 return;
             }
             
@@ -203,9 +206,6 @@
 
             const scriptTag = document.createElement('script');
             scriptTag.src = baseUrl + (baseUrl.indexOf('?') >= 0 ? '&' : '?') + "callback=handleGoogleJSONP&_cache=" + new Date().getTime();
-            scriptTag.onerror = function() {
-                document.getElementById('loadText').innerHTML = "<span style='color:red;'>Connection Error. Verify script setup.</span>";
-            };
             document.body.appendChild(scriptTag);
         },
 
@@ -265,7 +265,6 @@
                     <p>${isEn ? c.en : c.am}</p>
                 </div>`).join('');
 
-            // FIXED: Using type-safe string comparisons for IDs to make sure numbers match perfectly
             const filtered = this.data.filter(i => String(i.cat).trim() === String(this.activeCat).trim() && !i.hidden);
             
             if (filtered.length === 0) {
@@ -330,13 +329,23 @@
             document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en}</option>`).join('');
         },
 
+        // FIXED: Explicitly clear validation credential inputs right after evaluating to protect login state
         verifyLogin: function() {
             const root = getComputedStyle(document.documentElement);
             const user = root.getPropertyValue('--admin-user').trim().replace(/"/g, '');
-            if(document.getElementById('uIn').value === user && document.getElementById('pIn').value === this.cloudPassword){
+            const uEl = document.getElementById('uIn');
+            const pEl = document.getElementById('pIn');
+            
+            if(uEl.value === user && pEl.value === this.cloudPassword){
                 document.getElementById('adminDashboard').style.display='block';
+                uEl.value = "";
+                pEl.value = "";
                 this.closeModals();
-            } else { alert("Login Error"); }
+            } else { 
+                uEl.value = "";
+                pEl.value = "";
+                alert("Login Error"); 
+            }
         },
 
         updateSystemPassword: function() {
@@ -352,6 +361,7 @@
             
             alert("Password Sync Request Submitted!");
             this.cloudPassword = newPass;
+            document.getElementById('newPassInput').value = "";
         },
 
         setCat: function(id) { this.activeCat = String(id).trim(); this.render(); },
