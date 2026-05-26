@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PASTE YOUR LATEST GOOGLE DEPLOYMENT URL HERE */
+            /* PASTE THE NEWLY COPIED /exec URL CAREFULLY BETWEEN THE QUOTES */
             --google-sheet-url: "https://script.google.com/macros/s/AKfycbz53Me2aPYN7MR0WaDYFJwsNagl-lCYb_u7L5bCXb5ee54yzXNn5q_4dmZ_k3_XLd4j/exec";
             
             --hotel-en-1: "HIMMA";
@@ -84,7 +84,7 @@
     <h2 class="loader-welcome-title">Welcome To Himma Coffee</h2>
     <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ኮፊ በደህና መጡ</h3>
     <div class="spinner"></div>
-    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg);">Connecting to Sheet Registry...</p>
+    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg);">Syncing live configuration registry...</p>
 </div>
 
 <header class="header">
@@ -163,8 +163,9 @@
             const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             
             try {
-                const r = await fetch(sheetUrl);
-                if (!r.ok) throw new Error("HTTP failure status: " + r.status);
+                // High-performance clean fetching execution block
+                const r = await fetch(sheetUrl, { method: 'GET', redirect: 'follow' });
+                if (!r.ok) throw new Error("Server response failed with status: " + r.status);
                 const j = await r.json();
                 
                 this.data = j.items || [];
@@ -172,10 +173,10 @@
                 if (j.password) this.cloudPassword = String(j.password).trim();
                 
             } catch(e) { 
-                alert("DATABASE SYNC ERROR:\nYour app can't talk to Google Sheets. Check your deployment link properties.\nDetails: " + e.message);
+                alert("DATABASE READ WARNING:\nBrowser data sync could not read Google sheets directly.\n\nTroubleshooting details: " + e.message);
             } finally {
                 if (!this.cats || this.cats.length === 0) {
-                    this.cats = [{ id: "1", en: "Menu Items", am: "የምግብ ዝርዝር", img: "" }];
+                    this.cats = [{ id: "1", en: "Menu List", am: "የምግብ ዝርዝር", img: "" }];
                 }
                 if (this.cats.length > 0) this.activeCat = String(this.cats[0].id);
                 this.hideLoader();
@@ -208,7 +209,7 @@
             if (filtered.length === 0) {
                 document.getElementById('menuListing').innerHTML = `
                 <div style="text-align:center; padding: 40px 20px; color: #888;">
-                    <p style="font-size:16px;">${isEn ? 'No items found in this category.' : 'በዚህ ምድብ ውስጥ ምንም ዕቃዎች አልተገኙም።'}</p>
+                    <p style="font-size:16px;">${isEn ? 'No items found under this category right now.' : 'በዚህ ምድብ ውስጥ በአሁኑ ጊዜ ምንም ዕቃዎች አልተገኙም።'}</p>
                 </div>`;
             } else {
                 document.getElementById('menuListing').innerHTML = filtered.map(i => `
@@ -311,7 +312,7 @@
             try {
                 await fetch(sheetUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ items: this.data, cats: this.cats }) });
                 alert("Saved Successfully!"); this.init();
-            } catch(e) { alert("Error saving"); } finally { b.innerText = "💾 SYNC ALL CHANGES"; }
+            } catch(e) { alert("Error saving data patterns."); } finally { b.innerText = "💾 SYNC ALL CHANGES"; }
         },
         closeOnOutside: function(e) { if(e.target.className==='overlay') this.closeModals(); }
     };
