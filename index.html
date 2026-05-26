@@ -6,30 +6,21 @@
     <title>HIMMA COFFEE</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
-        /* ============================================================
-           1. MASTER CONTROL CENTER
-           ============================================================
-        */
         :root {
             /* PASTE YOUR LATEST GOOGLE DEPLOYMENT URL HERE */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbyP6lJ7NNhDFyHUlHaOTHHNhxGIn5gWSsV2MJ68DEnfWf0ovUwdXM0p_GS9hclg9SOc/exec";
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbz53Me2aPYN7MR0WaDYFJwsNagl-lCYb_u7L5bCXb5ee54yzXNn5q_4dmZ_k3_XLd4j/exec";
             
-            /* Hotel Name Parts */
             --hotel-en-1: "HIMMA";
             --hotel-en-2: "COFFEE";
             --hotel-en-3: ""; 
-            
             --hotel-am-1: "Dቦራ";
             --hotel-am-2: "ጁስ እና ";
             --hotel-am-3: "በርገር";
-
-            /* Color Controls */
             --word-1-color: #ED7014;
             --word-2-color: #028A0F;
             --word-3-color: #FFBA00; 
             --nav-bg-color: #ffffff;
             --call-btn-color: #ED7014;
-            
             --header-bg: #564C4D;
             --page-bg: #ffffff;
             --price-color: #3E5F34;
@@ -39,7 +30,6 @@
             --admin-user: "himma";
         }
 
-        /* --- UI CORE --- */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--page-bg); color: #333; font-family: 'Poppins', 'Noto Sans Ethiopic', sans-serif; padding-bottom: 100px; }
         
@@ -65,16 +55,14 @@
         .container { padding: 15px; }
         .card { display: flex; align-items: flex-start; background: white; border-radius: 12px; margin-bottom: 15px; padding: 12px; border: 1px solid #f0f0f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; } 
         .food-img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; margin-right: 15px; flex-shrink: 0; }
-        
         .food-info-area { flex-grow: 1; min-width: 0; }
         .food-title { color: var(--brand-primary); font-size: 19px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; }
         .food-ing { font-size: 13px; color: var(--ing-color); font-style: italic; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
-        
         .price-tag { font-weight: bold; color: var(--price-color); margin-top: 8px; font-size: 17px; }
 
         .overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:4000; align-items:center; justify-content:center; }
         .modal { background:white; padding:25px; border-radius:15px; width:92%; max-width:750px; position: relative; }
-        #modalImgHD { width: 100%; max-height: 65vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; display: block; image-rendering: -webkit-optimize-contrast; }
+        #modalImgHD { width: 100%; max-height: 65vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; display: block; }
         .close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #000; }
 
         .call-order-btn { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--call-btn-color); color: white; padding: 16px 35px; border-radius: 50px; text-decoration: none; z-index: 2000; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
@@ -96,7 +84,7 @@
     <h2 class="loader-welcome-title">Welcome To Himma Coffee</h2>
     <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ኮፊ በደህና መጡ</h3>
     <div class="spinner"></div>
-    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg); letter-spacing: 0.5px;">Connecting... 0%</p>
+    <p id="loadText" style="margin-top:15px; font-size:13px; font-weight:600; color:var(--header-bg);">Connecting to Sheet Registry...</p>
 </div>
 
 <header class="header">
@@ -144,22 +132,19 @@
             <table><tbody id="adminItemBody"></tbody></table>
         </div>
     </div>
-    
     <div class="admin-section">
         <h4>3. Admin Security</h4>
-        <p style="font-size: 12px; margin-bottom: 8px; color:#666;">Change system login password securely:</p>
-        <input type="text" id="newPassInput" placeholder="Enter New Password" autocomplete="off">
+        <input type="text" id="newPassInput" placeholder="Enter New Password">
         <button id="passUpdateBtn" class="btn" style="background:#3498db; width:100%; margin-top:5px;" onclick="APP.updateSystemPassword()">🔒 UPDATE PASSWORD</button>
     </div>
-    
     <button id="cloudBtn" onclick="APP.saveToCloud()" style="width:100%; padding:22px; background:#27ae60; color:white; border:none; border-radius:12px; font-weight:bold;">💾 SYNC ALL CHANGES</button>
 </div>
 
 <div id="loginOverlay" class="overlay">
     <div class="modal" onclick="event.stopPropagation()" style="text-align:center;">
         <h2 id="loginWelcomeText" style="margin-bottom:15px; color:var(--header-bg);"></h2>
-        <input type="text" id="uIn" placeholder="User" autocomplete="off">
-        <input type="password" id="pIn" placeholder="Pass" autocomplete="off">
+        <input type="text" id="uIn" placeholder="User">
+        <input type="password" id="pIn" placeholder="Pass">
         <button onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); width:100%; margin-top:15px;">LOGIN</button>
     </div>
 </div>
@@ -170,45 +155,29 @@
 
 <script>
     const APP = {
-        data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null,
-        cloudPassword: "00000",
+        data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null, cloudPassword: "00000",
 
         init: async function() {
-            const loadTxt = document.getElementById('loadText');
-            loadTxt.innerText = "Connecting... 15%";
-            
             const root = getComputedStyle(document.documentElement);
             document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
-            
             const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
             
             try {
-                loadTxt.innerText = "Connecting... 40%";
-                const r = await fetch(sheetUrl); 
-                
-                loadTxt.innerText = "Connecting... 75%";
+                const r = await fetch(sheetUrl);
+                if (!r.ok) throw new Error("HTTP failure status: " + r.status);
                 const j = await r.json();
                 
-                loadTxt.innerText = "Connecting... 95%";
                 this.data = j.items || [];
                 this.cats = j.cats || [];
+                if (j.password) this.cloudPassword = String(j.password).trim();
                 
-                if (j.password) {
-                    this.cloudPassword = String(j.password).trim();
-                }
             } catch(e) { 
-                console.error("Connection failed, loading with protection fallbacks:", e);
+                alert("DATABASE SYNC ERROR:\nYour app can't talk to Google Sheets. Check your deployment link properties.\nDetails: " + e.message);
             } finally {
-                // FALLBACK SAFETY NET: If data is blank, inject structural defaults so UI works
                 if (!this.cats || this.cats.length === 0) {
-                    this.cats = [
-                        { id: "hot_drinks", en: "Hot Drinks", am: "ትኩስ መጠጦች", img: "" },
-                        { id: "fast_food", en: "Fast Food", am: "ፈጣን ምግቦች", img: "" }
-                    ];
+                    this.cats = [{ id: "1", en: "Menu Items", am: "የምግብ ዝርዝር", img: "" }];
                 }
-                if (!this.activeCat && this.cats.length > 0) {
-                    this.activeCat = this.cats[0].id;
-                }
+                if (this.cats.length > 0) this.activeCat = String(this.cats[0].id);
                 this.hideLoader();
             }
         },
@@ -223,24 +192,10 @@
             const isEn = this.lang === 'en';
             const root = getComputedStyle(document.documentElement);
             
-            const hEn = [
-                root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, ''),
-                root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, ''),
-                root.getPropertyValue('--hotel-en-3').trim().replace(/"/g, '')
-            ].filter(Boolean).join(' ');
-
-            const hAm = [
-                root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, ''),
-                root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, ''),
-                root.getPropertyValue('--hotel-am-3').trim().replace(/"/g, '')
-            ].filter(Boolean).join(' ');
-
             document.getElementById('w1').innerText = isEn ? root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, '');
             document.getElementById('w2').innerText = isEn ? root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
             document.getElementById('w3').innerText = isEn ? root.getPropertyValue('--hotel-en-3').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-3').trim().replace(/"/g, '');
-            
             document.getElementById('callBtnText').innerText = isEn ? "Call To Order" : "ለማዘዝ ይደውሉ";
-            document.getElementById('loginWelcomeText').innerText = isEn ? `Welcome to "${hEn}"` : `እንኳን ወደ "${hAm}" በደህና መጡ`;
 
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
                 <div class="nav-item ${String(this.activeCat) === String(c.id) ? 'active' : ''}" onclick="APP.setCat('${c.id}')">
@@ -254,7 +209,6 @@
                 document.getElementById('menuListing').innerHTML = `
                 <div style="text-align:center; padding: 40px 20px; color: #888;">
                     <p style="font-size:16px;">${isEn ? 'No items found in this category.' : 'በዚህ ምድብ ውስጥ ምንም ዕቃዎች አልተገኙም።'}</p>
-                    <p style="font-size:12px; margin-top:5px; opacity:0.7;">${isEn ? 'Log in via top-left menu to add food items.' : 'ምግቦችን ለመጨመር ከላይ በግራ በኩል ባለው ማውጫ ይግቡ።'}</p>
                 </div>`;
             } else {
                 document.getElementById('menuListing').innerHTML = filtered.map(i => `
@@ -296,9 +250,9 @@
             document.getElementById('adminItemBody').innerHTML = this.data.map((i, idx) => `
                 <tr style="${i.hidden ? 'opacity:0.3' : ''}">
                     <td>
-                        <input value="${i.en}" onchange="APP.data[${idx}].en=this.value" placeholder="EN Name">
-                        <input value="${i.am}" onchange="APP.data[${idx}].am=this.value" placeholder="AM Name">
-                        <input value="${i.ing || ''}" onchange="APP.data[${idx}].ing=this.value" placeholder="Ingredients" style="font-size:11px;">
+                        <input value="${i.en}" onchange="APP.data[${idx}].en=this.value">
+                        <input value="${i.am}" onchange="APP.data[${idx}].am=this.value">
+                        <input value="${i.ing || ''}" onchange="APP.data[${idx}].ing=this.value" style="font-size:11px;">
                         <select onchange="APP.data[${idx}].cat=this.value">
                             ${this.cats.map(c => `<option value="${c.id}" ${String(c.id)===String(i.cat)?'selected':''}>${c.en}</option>`).join('')}
                         </select>
@@ -316,41 +270,25 @@
         verifyLogin: function() {
             const root = getComputedStyle(document.documentElement);
             const user = root.getPropertyValue('--admin-user').trim().replace(/"/g, '');
-            
             if(document.getElementById('uIn').value === user && document.getElementById('pIn').value === this.cloudPassword){
                 document.getElementById('adminDashboard').style.display='block';
-                document.getElementById('uIn').value = ""; document.getElementById('pIn').value = "";
                 this.closeModals();
             } else { alert("Login Error"); }
         },
 
         updateSystemPassword: async function() {
             const newPass = document.getElementById('newPassInput').value.trim();
-            if(!newPass) { alert("Please type a valid password first!"); return; }
-            
-            const btn = document.getElementById('passUpdateBtn');
-            btn.innerText = "SAVING SECURITY KEY...";
-            
+            if(!newPass) return;
             const root = getComputedStyle(document.documentElement);
             const sheetUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
-            
             try {
-                await fetch(sheetUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({ action: "update_password", newPassword: newPass })
-                });
-                alert("Password updated inside Cloud Registry successfully!");
+                await fetch(sheetUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "update_password", newPassword: newPass }) });
+                alert("Password updated!");
                 this.cloudPassword = newPass;
-                document.getElementById('newPassInput').value = "";
-            } catch(e) {
-                alert("Failed to sync security configuration.");
-            } finally {
-                btn.innerText = "🔒 UPDATE PASSWORD";
-            }
+            } catch(e) { alert("Failed to sync security configuration."); }
         },
 
-        setCat: function(id) { this.activeCat = id; this.render(); },
+        setCat: function(id) { this.activeCat = String(id); this.render(); },
         toggleLang: function() { this.lang = (this.lang === 'en' ? 'am' : 'en'); this.render(); },
         showLogin: function(e) { e.stopPropagation(); document.getElementById('loginOverlay').style.display='flex'; },
         closeAdmin: function() { document.getElementById('adminDashboard').style.display='none'; },
@@ -362,8 +300,8 @@
         prepRename: function(id) { this.editId = id; const c = this.cats.find(x => x.id == id); document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); },
         applyCatRename: function() { const c = this.cats.find(x => x.id == this.editId); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
         deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => c.id != id); this.render(); } },
-        createNewCat: function() { this.cats.push({id:document.getElementById('nCatId').value, en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.closeModals(); this.render(); },
-        createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:document.getElementById('nItemCat').value, en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.closeModals(); this.render(); },
+        createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.closeModals(); this.render(); },
+        createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
         deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         saveToCloud: async function() {
