@@ -42,16 +42,17 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
 
-        /* Structurally identical to V12 grid layout but adjusted for removed lang button */
+        /* Modified to support full stacked alignment */
         .header { background: var(--header-bg); padding: 15px; display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 1000; min-height: 110px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .header-left-menu { cursor: pointer; font-size: 28px; color: white; width: 40px; text-align: center; }
         .logo-container-block { display: flex; align-items: center; justify-content: center; width: 75px; height: 75px; background: rgba(255,255,255,0.05); border-radius: 50%; padding: 3px; }
         .logo-img { height: 100%; width: 100%; object-fit: cover; border-radius: 50%; }
-        .header-center-area { display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding-left: 4px; }
-        .header h1 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; line-height: 1.2; word-break: break-word; }
+        .header-center-area { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; padding-left: 4px; width: 100%; }
+        .header h1 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 800; line-height: 1.2; word-break: break-word; }
         .w1 { color: var(--word-1-color); }
         .w2 { color: var(--word-2-color); }
         .w3 { color: var(--word-3-color); }
+        .hotel-subtitle-amh { display: block; font-size: 16px; font-weight: 700; color: #ffffff; margin-top: 2px; font-family: 'Noto Sans Ethiopic', sans-serif; }
         
         .nav-bar { display: flex; overflow-x: auto; padding: 15px 10px; background: var(--nav-bg-color); position: sticky; top: 110px; z-index: 900; border-bottom: 1px solid #eee; min-height: 175px; scrollbar-width: none; gap: 15px; }
         .nav-bar::-webkit-scrollbar { display: none; }
@@ -65,6 +66,10 @@
         .food-img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; margin-right: 15px; flex-shrink: 0; }
         .food-info-area { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
         .food-title { color: var(--brand-primary); font-size: 18px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; word-wrap: break-word; }
+        
+        /* New explicit typography for the stacked Amharic menu item names */
+        .food-title-amh { display: block; font-size: 17px; font-weight: 700; color: #444444; margin-top: 2px; font-family: 'Noto Sans Ethiopic', sans-serif; }
+        
         .food-ing { font-size: 13px; color: var(--ing-color); font-style: italic; line-height: 1.3; word-wrap: break-word; margin-bottom: 6px; }
         .price-tag { font-weight: bold; color: var(--price-color); font-size: 17px; }
 
@@ -103,7 +108,7 @@
     </div>
     <div class="header-center-area">
         <h1 id="mainTitle"><span class="w1" id="w1"></span> <span class="w2" id="w2"></span> <span class="w3" id="w3"></span></h1>
-        <div id="subTitle" style="font-size:12px; font-weight:bold; letter-spacing:3px; color:#ffffff; margin-top: 2px;">MENU / ማውጫ</div>
+        <div id="subTitle" style="font-size:11px; font-weight:bold; letter-spacing:2px; color:rgba(255,255,255,0.8); margin-top: 2px;">MENU / ማውጫ</div>
     </div>
 </header>
 
@@ -114,7 +119,7 @@
     <div class="modal" onclick="event.stopPropagation()">
         <span class="close-x" onclick="APP.closeDetail()">&times;</span>
         <img id="modalImgHD" src="">
-        <h2 id="modalTitle" style="color:var(--brand-primary);"></h2>
+        <h2 id="modalTitle" style="color:var(--brand-primary); line-height:1.4;"></h2>
         <p id="modalIng" style="color:var(--ing-color); font-style:italic; margin: 10px 0;"></p>
         <div id="modalPrice" style="color:var(--price-color); font-size:24px; font-weight:bold; border-top:1px solid #eee; padding-top:10px;"></div>
     </div>
@@ -150,7 +155,7 @@
 <div id="loginOverlay" class="overlay">
     <div class="modal" onclick="event.stopPropagation()" style="text-align:center;">
         <span class="close-x" onclick="APP.closeModals()">&times;</span>
-        <h2 style="margin-bottom:15px; color:var(--header-bg); font-size:22px;" id="loginModalTitle">System Authentication</h2>
+        <h2 style="margin-bottom:20px; color:var(--header-bg); font-size:20px; line-height:1.4;" id="loginModalTitle"></h2>
         <input type="text" id="uIn" placeholder="Username" autocomplete="off">
         <input type="password" id="pIn" placeholder="Password" autocomplete="off">
         <button id="btnLoginSubmit" onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); margin-top:15px;">LOGIN</button>
@@ -172,7 +177,7 @@
             APP.processIncomingData(response);
         } else {
             console.error("Sheet Response Interrupted");
-            alert("Sync connection error from Google server. Retrying... (ከጉግል አገልጋይ የውሂብ ማመሳሰል ስህተት።)");
+            alert("Sync connection error from Google server. Retrying...");
         }
     };
 
@@ -241,20 +246,22 @@
         render: function() {
             const root = getComputedStyle(document.documentElement);
             
-            // Strictly matching requested multi-lingual styling inside headers
             const engTitle = root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, '') + " " + root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '');
             const amhTitle = root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, '') + " " + root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
+            
+            // Correction 1: Amharic Name falls completely under English name, centered
             document.getElementById('w1').innerText = engTitle;
-            document.getElementById('w2').innerText = " (" + amhTitle + ")";
+            document.getElementById('w2').innerHTML = `<span class="hotel-subtitle-amh">${amhTitle}</span>`;
             document.getElementById('w3').innerText = "";
 
-            // Structural static placeholders matching V12 definitions 
-            document.getElementById('loginModalTitle').innerText = "System Authentication (የስርዓት ማረጋገጫ)";
+            // Correction 3: Admin box title changed to explicit requested phrase layout
+            document.getElementById('loginModalTitle').innerHTML = `Welcome to "${engTitle}" Admin Page<br><span style="display:block; font-size:16px; font-weight:bold; color:#666; margin-top:6px; font-family:'Noto Sans Ethiopic';">እንኳን ወደ "${amhTitle}" አስተዳዳሪ ገጽ በደህና መጡ</span>`;
+            
             document.getElementById('uIn').placeholder = "Username (የተጠቃሚ ስም)";
             document.getElementById('pIn').placeholder = "Password (የይለፍ ቃል)";
             document.getElementById('btnLoginSubmit').innerText = "LOGIN (ግባ)";
             
-            document.getElementById('admDashTitle').innerText = "HIMMA COFFEE MANAGER (ሂማ ኮፊ አስተዳዳሪ)";
+            document.getElementById('admDashTitle').innerText = engTitle + " MANAGER (" + amhTitle + " አስተዳዳሪ)";
             document.getElementById('lblCatMgmt').innerText = "1. Category Management (የምድብ አስተዳደር)";
             document.getElementById('btnAddCat').innerText = "+ ADD NEW CATEGORY (አዲስ ምድብ ጨምር)";
             document.getElementById('lblItemMgmt').innerText = "2. Menu Items Management (የምግብ ዝርዝር አስተዳደር)";
@@ -273,7 +280,7 @@
             document.getElementById('lblItemImgFile').innerText = "Food Display Image File (የምግቡ ምስል ፋይል):";
             document.getElementById('btnCreateItem').innerText = "ADD TO MENU LIST (ወደ ምግብ ዝርዝር ጨምር)";
 
-            // Render navigation elements with brackets
+            // Category layout with clear brackets
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
                 <div class="nav-item ${String(this.activeCat).trim() === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${String(c.id).trim()}')">
                     <img src="${c.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
@@ -285,14 +292,18 @@
             if (filtered.length === 0) {
                 document.getElementById('menuListing').innerHTML = `
                 <div style="text-align:center; padding: 40px 20px; color: #888; width:100%;">
-                    <p style="font-size:16px;">No items found under this category right now. (በዚህ ምድብ ውስጥ ምንም ዕቃዎች አልተገኙም)</p>
+                    <p style="font-size:16px;">No items found. (በዚህ ምድብ ውስጥ ምንም ዕቃዎች አልተገኙም)</p>
                 </div>`;
             } else {
+                // Correction 2: Amharic name inside bracket placed completely underneath, bolded, and font increased
                 document.getElementById('menuListing').innerHTML = filtered.map(i => `
                     <div class="card" onclick="APP.openDetail('${i.id}')">
                         <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
                         <div class="food-info-area">
-                            <div class="food-title">${i.en} <span style="font-size:15px; color:#666; font-weight:normal;">(${i.am})</span></div>
+                            <div class="food-title">
+                                ${i.en}
+                                <span class="food-title-amh">(${i.am})</span>
+                            </div>
                             <div class="food-ing">${i.ing || ''}</div>
                             <div class="price-tag">${i.price} ETB</div>
                         </div>
@@ -305,7 +316,8 @@
             const item = this.data.find(i => String(i.id) === String(id));
             if(!item) return;
             document.getElementById('modalImgHD').src = item.img || '';
-            document.getElementById('modalTitle').innerText = item.en + " (" + item.am + ")";
+            // Match detail view context configuration safely
+            document.getElementById('modalTitle').innerHTML = `${item.en}<br><span style="font-size:18px; font-weight:700; color:#444444; font-family:'Noto Sans Ethiopic';">(${item.am})</span>`;
             document.getElementById('modalIng').innerText = item.ing || '';
             document.getElementById('modalPrice').innerText = item.price + " ETB";
             document.getElementById('itemDetailModal').style.display = 'flex';
@@ -317,8 +329,8 @@
                 <div class="cat-row">
                     <div class="cat-info"><span><b>${c.en}</b> (${c.am})</span>
                         <div>
-                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename (ስም ቀይር)</button>
-                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del (ሰርዝ)</button>
+                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename</button>
+                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del</button>
                         </div>
                     </div>
                     <input type="file" accept="image/*" onchange="APP.updateCatImg(${idx}, this)">
@@ -338,7 +350,7 @@
                     <td style="width:100px;"><input type="text" class="price-box" value="${i.price}" onchange="APP.data[${idx}].price=this.value"></td>
                     <td style="width:70px; text-align:right;">
                         <button onclick="APP.toggleHide(${idx})" style="background:#555; color:white; border:none; padding:8px; width:100%; margin-bottom:5px; border-radius:4px; cursor:pointer;">${i.hidden?'Show':'Hide'}</button>
-                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">Del (ሰርዝ)</button>
+                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">Del</button>
                     </td>
                 </tr>`).join('');
             document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en} (${c.am})</option>`).join('');
@@ -358,14 +370,14 @@
             } else { 
                 uEl.value = "";
                 pEl.value = "";
-                alert("Access Key Validation Failed (የመግቢያ መለያው የተሳሳተ ነው)"); 
+                alert("Access Key Validation Failed!"); 
             }
         },
 
         updateSystemPassword: function() {
             const newPass = document.getElementById('newPassInput').value.trim();
             if(!newPass) {
-                alert("Password cannot be empty! (የይለፍ ቃል ባዶ መሆን አይችልም!)");
+                alert("Password cannot be empty!");
                 return;
             }
             
@@ -376,13 +388,13 @@
             document.getElementById('corsPayloadField').value = JSON.stringify({ action: "update_password", newPassword: newPass });
             form.submit();
             
-            alert("Password update processed! Syncing storage... (የይለፍ ቃል ተቀይሯል! ወደ አገልጋይ በመላክ ላይ...)");
+            alert("Password update processed! Syncing storage...");
             this.cloudPassword = newPass;
             document.getElementById('newPassInput').value = "";
         },
 
         setCat: function(id) { this.activeCat = String(id).trim(); this.render(); },
-        toggleLang: function() { /* No-Op in layout V13 to strictly safeguard V12 functions */ },
+        toggleLang: function() { /* No-Op safely retained */ },
         showLogin: function(e) { e.stopPropagation(); document.getElementById('loginOverlay').style.display='flex'; },
         
         closeAdmin: function() { 
@@ -432,11 +444,11 @@
         
         prepRename: function(id) { this.editId = id; const c = this.cats.find(x => String(x.id).trim() == String(id).trim()); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
         applyCatRename: function() { const c = this.cats.find(x => String(x.id).trim() == String(this.editId).trim()); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
-        deleteCat: function(id) { if(confirm("Delete Category? (ይህ ምድብ ይሰረዝ?)")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
+        deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
         createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value).trim(), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.imgTmp=''; this.closeModals(); this.render(); },
         createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value).trim(), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.imgTmp=''; this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
-        deleteItem: function(idx) { if(confirm("Delete Item? (ይህ ምግብ ይሰረዝ?)")) { this.data.splice(idx, 1); this.render(); } },
+        deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
         
         saveToCloud: function() {
             if (!this.cats || this.cats.length === 0) {
@@ -446,7 +458,7 @@
             
             const root = getComputedStyle(document.documentElement);
             const b = document.getElementById('cloudBtn'); 
-            b.innerText = "SYNCING OVERRIDE (በማመሳሰል ላይ)...";
+            b.innerText = "SYNCING OVERRIDE...";
             
             const form = document.getElementById('corsBypassForm');
             form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
@@ -455,7 +467,7 @@
             form.submit();
             
             setTimeout(() => {
-                alert("Data changes saved successfully! (ለውጦችዎ በተሳካ ሁኔታ ተቀምጠዋል!)");
+                alert("Data changes saved successfully!");
                 b.innerText = "💾 SYNC ALL CHANGES";
                 
                 const loader = document.getElementById('pageLoader');
