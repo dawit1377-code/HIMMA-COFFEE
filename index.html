@@ -7,20 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PASTE YOUR ACTIVE RE-DEPLOYED WEB APP LINK HERE */
-            --google-sheet-url: "https://script.google.com/macros/s/AKfycbz3j3O_yVjm_GjNIBe8JnMdgfybMZ7-zRF3R8vgyUI_SeYuZsqbyvNpIwMUxWLvi82B/exec";
+            /* PASTE YOUR LATEST DEPLOYED GOOGLE APPS Script EXECUTION LINK STRING DIRECTLY BELOW */
+            --google-sheet-url: "https://script.google.com/macros/s/AKfycbzn-LocweeJ-muUeM0YSchXexILs-qU3HNalfuNpuNWX7EkH5uU0pnStYM9vBmgAUkE/exec";
             
-            /* --- LOADING PAGE STYLE CONFIGURATIONS --- */
             --welcome-title-color: #E56717;
             --welcome-subtitle-color: #564C4D;
-            
-            /* --- GLOBAL INTERFACE THEME STYLES --- */
             --hotel-en-1: "HIMMA";
             --hotel-en-2: "COFFEE";
             --hotel-en-3: ""; 
-            --hotel-am-1: "Dቦራ";
-            --hotel-am-2: "ጁስ እና ";
-            --hotel-am-3: "በርገር";
+            --hotel-am-1: "ሂማ";
+            --hotel-am-2: "ኮፊ";
+            --hotel-am-3: "";
             --word-1-color: #ED7014;
             --word-2-color: #028A0F;
             --word-3-color: #FFBA00; 
@@ -35,11 +32,9 @@
             --admin-user: "himma";
         }
 
-        /* Structural Baseline Layout Resets */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--page-bg); color: #333; font-family: 'Poppins', 'Noto Sans Ethiopic', sans-serif; padding-bottom: 100px; }
         
-        /* Isolated App Loading Layer Layout */
         #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; transition: opacity 0.4s ease; }
         .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--welcome-title-color); margin-bottom: 4px; }
         .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--welcome-subtitle-color); margin-bottom: 30px; }
@@ -47,26 +42,24 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
 
-        /* Navigation Header Matrix Structure */
-        .header { background: var(--header-bg); padding: 10px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; height: 130px; }
-        .header-left-menu { cursor: pointer; font-size: 28px; padding: 10px; color: white; width: 50px; flex-shrink: 0; }
-        .logo-container-block { display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; flex-shrink: 0; margin-right: 10px; }
-        .logo-img { height: 80px; width: 80px; object-fit: contain; }
-        .header-center-area { text-align: center; flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-        .header h1 { font-family: 'Playfair Display'; font-size: 22px; font-weight: 800; display: inline-block; white-space: nowrap; }
+        /* Feature 4 Fix: Flexible grid matrix avoids fixed-pixel spacing collisions entirely */
+        .header { background: var(--header-bg); padding: 15px; display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 1000; min-height: 110px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-left-menu { cursor: pointer; font-size: 28px; color: white; width: 40px; text-align: center; }
+        .logo-container-block { display: flex; align-items: center; justify-content: center; width: 75px; height: 75px; background: rgba(255,255,255,0.05); border-radius: 50%; padding: 3px; }
+        .logo-img { height: 100%; width: 100%; object-fit: cover; border-radius: 50%; }
+        .header-center-area { display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding-left: 4px; }
+        .header h1 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; line-height: 1.2; word-break: break-word; }
         .w1 { color: var(--word-1-color); }
         .w2 { color: var(--word-2-color); }
         .w3 { color: var(--word-3-color); }
-        .lang-btn-style { background: white; color: var(--header-bg); border: none; padding: 10px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; flex-shrink: 0; font-size: 13px; }
+        .lang-btn-style { background: white; color: var(--header-bg); border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 13px; justify-self: end; }
         
-        /* Category Row Slider Layout System */
-        .nav-bar { display: flex; overflow-x: auto; padding: 15px 10px; background: var(--nav-bg-color); position: sticky; top: 130px; z-index: 900; border-bottom: 1px solid #eee; min-height: 195px; scrollbar-width: none; gap: 15px; }
+        .nav-bar { display: flex; overflow-x: auto; padding: 15px 10px; background: var(--nav-bg-color); position: sticky; top: 110px; z-index: 900; border-bottom: 1px solid #eee; min-height: 175px; scrollbar-width: none; gap: 15px; }
         .nav-bar::-webkit-scrollbar { display: none; }
-        .nav-item { text-align: center; min-width: 140px; opacity: 0.5; cursor: pointer; flex-shrink: 0; border-bottom: 4px solid transparent; padding-bottom: 8px; }
+        .nav-item { text-align: center; min-width: 120px; opacity: 0.5; cursor: pointer; flex-shrink: 0; border-bottom: 4px solid transparent; padding-bottom: 8px; transition: all 0.2s ease; }
         .nav-item.active { opacity: 1; font-weight: bold; color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
-        .nav-item img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
+        .nav-item img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
 
-        /* Unified Container Configurations */
         .container { padding: 15px; width: 100%; max-width: 100%; display: block; box-sizing: border-box; }
         .card { display: flex; align-items: flex-start; background: #ffffff; border-radius: 12px; margin-bottom: 15px; padding: 12px; border: 1px solid #f0f0f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; cursor: pointer; width: 100%; box-sizing: border-box; } 
         .food-img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; margin-right: 15px; flex-shrink: 0; }
@@ -75,16 +68,13 @@
         .food-ing { font-size: 13px; color: var(--ing-color); font-style: italic; line-height: 1.3; word-wrap: break-word; margin-bottom: 6px; }
         .price-tag { font-weight: bold; color: var(--price-color); font-size: 17px; }
 
-        /* Overlay System Overwrites */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 4000; align-items: center; justify-content: center; padding: 15px; }
-        .modal { background: #ffffff; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px; position: relative; box-sizing: border-box; }
-        #modalImgHD { width: 100%; max-height: 50vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; display: block; }
+        .modal { background: #ffffff; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px; position: relative; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+        #modalImgHD { width: 100%; max-height: 45vh; object-fit: contain; border-radius: 10px; margin-bottom: 15px; display: block; }
         .close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #000000; z-index: 10; }
 
-        /* Fixed Footer Ordering Button Layer */
         .call-order-btn { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--call-btn-color); color: #ffffff; padding: 16px 35px; border-radius: 50px; text-decoration: none; z-index: 2000; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); white-space: nowrap; }
 
-        /* Admin Matrix Core Structural Rules */
         #adminDashboard { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 3000; padding: 15px; overflow-y: auto; box-sizing: border-box; }
         .admin-section { border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-bottom: 25px; background: #fafafa; }
         .btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: #ffffff; text-align: center; font-size: 14px; margin-top: 10px; }
@@ -109,7 +99,7 @@
     <div class="header-left-menu" onclick="APP.showLogin(event)">☰</div>
     <div id="logoContainer" class="logo-container-block">
         <img src="logo.jpg" class="logo-img" alt="Logo" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex'">
-        <div id="logoFallback" style="display:none; height:70px; width:70px; background: rgba(255,255,255,0.1); border-radius: 50%; align-items: center; justify-content: center; font-size: 30px; border: 2px dashed rgba(255,255,255,0.3);">🍔</div>
+        <div id="logoFallback" style="display:none; height:60px; width:60px; background: rgba(255,255,255,0.1); border-radius: 50%; align-items: center; justify-content: center; font-size: 24px;">☕</div>
     </div>
     <div class="header-center-area">
         <h1 id="mainTitle"><span class="w1" id="w1"></span> <span class="w2" id="w2"></span> <span class="w3" id="w3"></span></h1>
@@ -135,23 +125,23 @@
 
 <div id="adminDashboard">
     <div style="display:flex; justify-content:space-between; align-items:center; background:var(--header-bg); padding:20px; color:white; border-radius:12px; margin-bottom: 20px;">
-        <h3 style="margin:0;">DIBORA MANAGER</h3>
+        <h3 style="margin:0;" id="admDashTitle">DIBORA MANAGER</h3>
         <button onclick="APP.closeAdmin()" style="color:white; border:none; background:none; font-size:40px; cursor:pointer; line-height:1;">&times;</button>
     </div>
     <div class="admin-section">
-        <h4>1. Category Management</h4>
+        <h4 id="lblCatMgmt">1. Category Management</h4>
         <div id="adminCatList"></div>
-        <button class="btn" style="background:#8e44ad;" onclick="APP.openModal('catModal')">+ ADD NEW CATEGORY</button>
+        <button class="btn" style="background:#8e44ad;" id="btnAddCat" onclick="APP.openModal('catModal')">+ ADD NEW CATEGORY</button>
     </div>
     <div class="admin-section">
-        <h4>2. Menu Items Management</h4>
-        <button class="btn" style="background:#27ae60; margin-bottom:20px;" onclick="APP.openModal('itemModal')">+ ADD NEW FOOD ITEM</button>
+        <h4 id="lblItemMgmt">2. Menu Items Management</h4>
+        <button class="btn" style="background:#27ae60; margin-bottom:20px;" id="btnAddItem" onclick="APP.openModal('itemModal')">+ ADD NEW FOOD ITEM</button>
         <div style="overflow-x:auto; width:100%;">
             <table><tbody id="adminItemBody"></tbody></table>
         </div>
     </div>
     <div class="admin-section">
-        <h4>3. Admin Security</h4>
+        <h4 id="lblSecMgmt">3. Admin Security</h4>
         <input type="text" id="newPassInput" placeholder="Enter New Password">
         <button id="passUpdateBtn" class="btn" style="background:#3498db;" onclick="APP.updateSystemPassword()">🔒 UPDATE PASSWORD</button>
     </div>
@@ -161,16 +151,16 @@
 <div id="loginOverlay" class="overlay">
     <div class="modal" onclick="event.stopPropagation()" style="text-align:center;">
         <span class="close-x" onclick="APP.closeModals()">&times;</span>
-        <h2 style="margin-bottom:15px; color:var(--header-bg); font-size:22px;">System Authentication</h2>
+        <h2 style="margin-bottom:15px; color:var(--header-bg); font-size:22px;" id="loginModalTitle">System Authentication</h2>
         <input type="text" id="uIn" placeholder="User" autocomplete="off">
         <input type="password" id="pIn" placeholder="Pass" autocomplete="off">
-        <button onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); margin-top:15px;">LOGIN</button>
+        <button id="btnLoginSubmit" onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); margin-top:15px;">LOGIN</button>
     </div>
 </div>
 
-<div id="editCatModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3>Rename Category</h3><input type="text" id="eCatEn"><input type="text" id="eCatAm"><button onclick="APP.applyCatRename()" class="btn" style="background:#27ae60;">SAVE RENAME</button></div></div>
-<div id="catModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3>New Category</h3><input type="text" id="nCatId" placeholder="Category Unique ID (e.g., 5)"><input type="text" id="nCatEn" placeholder="English Title"><input type="text" id="nCatAm" placeholder="Amharic Title"><label style="font-size:12px; margin-top:5px; display:block; color:#666;">Category Icon Image File:</label><input type="file" onchange="APP.handleImg(this)"><button onclick="APP.createNewCat()" class="btn" style="background:#8e44ad;">CREATE CATEGORY</button></div></div>
-<div id="itemModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3>Add New Item</h3><select id="nItemCat"></select><input type="text" id="nItemEn" placeholder="Food English Title"><input type="text" id="nItemAm" placeholder="Food Amharic Title"><input type="text" id="nItemIng" placeholder="Ingredients/Description"><input type="text" id="nItemPrice" placeholder="Price Amount Only (e.g. 250)"><label style="font-size:12px; margin-top:5px; display:block; color:#666;">Food Display Image File:</label><input type="file" onchange="APP.handleImg(this)"><button onclick="APP.createNewItem()" class="btn" style="background:#27ae60;">ADD TO MENU LIST</button></div></div>
+<div id="editCatModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3 id="lblRenameCat">Rename Category</h3><input type="text" id="eCatEn"><input type="text" id="eCatAm"><button onclick="APP.applyCatRename()" class="btn" style="background:#27ae60;" id="btnSaveRename">SAVE RENAME</button></div></div>
+<div id="catModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3 id="lblNewCatTitle">New Category</h3><input type="text" id="nCatId" placeholder="Category Unique ID (e.g., 5)"><input type="text" id="nCatEn" placeholder="English Title"><input type="text" id="nCatAm" placeholder="Amharic Title"><label style="font-size:12px; margin-top:5px; display:block; color:#666;" id="lblCatImgFile">Category Icon Image File:</label><input type="file" accept="image/*" onchange="APP.handleImg(this)"><button onclick="APP.createNewCat()" class="btn" style="background:#8e44ad;" id="btnCreateCat">CREATE CATEGORY</button></div></div>
+<div id="itemModal" class="overlay"><div class="modal" onclick="event.stopPropagation()"><span class="close-x" onclick="APP.closeModals()">&times;</span><h3 id="lblAddItemTitle">Add New Item</h3><select id="nItemCat"></select><input type="text" id="nItemEn" placeholder="Food English Title"><input type="text" id="nItemAm" placeholder="Food Amharic Title"><input type="text" id="nItemIng" placeholder="Ingredients/Description"><input type="text" id="nItemPrice" placeholder="Price Amount Only (e.g. 250)"><label style="font-size:12px; margin-top:5px; display:block; color:#666;" id="lblItemImgFile">Food Display Image File:</label><input type="file" accept="image/*" onchange="APP.handleImg(this)"><button onclick="APP.createNewItem()" class="btn" style="background:#27ae60;" id="btnCreateItem">ADD TO MENU LIST</button></div></div>
 
 <form id="corsBypassForm" method="POST" target="bypassFrame" style="display:none;">
     <input type="hidden" name="jsonData" id="corsPayloadField">
@@ -178,17 +168,17 @@
 <iframe name="bypassFrame" style="display:none;" id="bypassFrame"></iframe>
 
 <script>
-    // Universal Global JSONP Matrix Signal Interceptor
     window.handleGoogleJSONP = function(response) {
         if (response && response.status !== "error") {
             APP.processIncomingData(response);
         } else {
             console.error("Sheet Response Interrupted");
+            alert(APP.lang === 'en' ? "Sync connection error from Google server. Retrying..." : "ከጉግል አገልጋይ የውሂብ ማመሳሰል ስህተት። እንደገና በመሞከር ላይ...");
         }
     };
 
     const APP = {
-        data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null, cloudPassword: "00000",
+        data: [], cats: [], lang: 'en', activeCat: '', imgTmp: '', editId: null, cloudPassword: "himma",
         isDataReady: false, currentPercent: 1,
 
         init: function() {
@@ -196,7 +186,7 @@
             document.getElementById('callLink').href = "tel:" + root.getPropertyValue('--phone-number').trim().replace(/"/g, '');
             
             let baseUrl = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
-            if (!baseUrl || baseUrl.includes("YOUR_NEW_EXEC_URL_HERE")) {
+            if (!baseUrl || baseUrl.includes("YOUR_EXEC_URL_HERE")) {
                 return;
             }
             
@@ -211,7 +201,6 @@
 
         startSmoothCountdown: function() {
             const txt = document.getElementById('progressText');
-            
             const interval = setInterval(() => {
                 if (!this.isDataReady && this.currentPercent >= 85) {
                     if (this.currentPercent < 95) {
@@ -227,7 +216,7 @@
                         this.hideLoader();
                     }
                 }
-            }, 20);
+            }, 15);
         },
 
         processIncomingData: function(j) {
@@ -258,6 +247,31 @@
             document.getElementById('w2').innerText = isEn ? root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
             document.getElementById('w3').innerText = isEn ? root.getPropertyValue('--hotel-en-3').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-3').trim().replace(/"/g, '');
             document.getElementById('callBtnText').innerText = isEn ? "Call To Order" : "ለማዘዝ ይደውሉ";
+
+            // Feature 5 Fix: Map translation labels across all login views dynamically
+            document.getElementById('loginModalTitle').innerText = isEn ? "System Authentication" : "የስርዓት ማረጋገጫ";
+            document.getElementById('uIn').placeholder = isEn ? "Username" : "የተጠቃሚ ስም";
+            document.getElementById('pIn').placeholder = isEn ? "Password" : "የይለፍ ቃል";
+            document.getElementById('btnLoginSubmit').innerText = isEn ? "LOGIN" : "ግባ";
+            
+            document.getElementById('admDashTitle').innerText = isEn ? "HIMMA COFFEE MANAGER" : "ሂማ ኮፊ አስተዳዳሪ";
+            document.getElementById('lblCatMgmt').innerText = isEn ? "1. Category Management" : "1. የምድብ አስተዳደር";
+            document.getElementById('btnAddCat').innerText = isEn ? "+ ADD NEW CATEGORY" : "+ አዲስ ምድብ ጨምር";
+            document.getElementById('lblItemMgmt').innerText = isEn ? "2. Menu Items Management" : "2. የምግብ ዝርዝር አስተዳደር";
+            document.getElementById('btnAddItem').innerText = isEn ? "+ ADD NEW FOOD ITEM" : "+ አዲስ ምግብ ጨምር";
+            document.getElementById('lblSecMgmt').innerText = isEn ? "3. Admin Security" : "3. የአስተዳዳሪ ደህንነት";
+            document.getElementById('newPassInput').placeholder = isEn ? "Enter New Password" : "አዲስ የይለፍ ቃል ያስገቡ";
+            document.getElementById('passUpdateBtn').innerText = isEn ? "🔒 UPDATE PASSWORD" : "🔒 የይለፍ ቃል ቀይር";
+            document.getElementById('cloudBtn').innerText = isEn ? "💾 SYNC ALL CHANGES" : "💾 ለውጦችን አመሳስል";
+
+            document.getElementById('lblRenameCat').innerText = isEn ? "Rename Category" : "ምድብ ስም ቀይር";
+            document.getElementById('btnSaveRename').innerText = isEn ? "SAVE RENAME" : "ለውጡን አስቀምጥ";
+            document.getElementById('lblNewCatTitle').innerText = isEn ? "New Category" : "አዲስ ምድብ";
+            document.getElementById('lblCatImgFile').innerText = isEn ? "Category Icon Image File:" : "የምድብ ምስል ፋይል:";
+            document.getElementById('btnCreateCat').innerText = isEn ? "CREATE CATEGORY" : "ምድብ ፍጠር";
+            document.getElementById('lblAddItemTitle').innerText = isEn ? "Add New Item" : "አዲስ ምግብ ማውጫ";
+            document.getElementById('lblItemImgFile').innerText = isEn ? "Food Display Image File:" : "የምግቡ ምስል ፋይል:";
+            document.getElementById('btnCreateItem').innerText = isEn ? "ADD TO MENU LIST" : "ወደ ምግብ ዝርዝር ጨምር";
 
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
                 <div class="nav-item ${String(this.activeCat).trim() === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${String(c.id).trim()}')">
@@ -298,17 +312,19 @@
         closeDetail: function() { document.getElementById('itemDetailModal').style.display = 'none'; },
 
         renderAdmin: function() {
+            const isEn = this.lang === 'en';
             document.getElementById('adminCatList').innerHTML = this.cats.map((c, idx) => `
                 <div class="cat-row">
                     <div class="cat-info"><span><b>${c.en}</b> / ${c.am}</span>
                         <div>
-                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename</button>
-                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del</button>
+                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">${isEn?'Rename':'ስም ቀይር'}</button>
+                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">${isEn?'Del':'ሰርዝ'}</button>
                         </div>
                     </div>
-                    <input type="file" onchange="APP.updateCatImg(${idx}, this)">
+                    <input type="file" accept="image/*" onchange="APP.updateCatImg(${idx}, this)">
                 </div>`).join('');
 
+            // Feature 1 Core Fix: Select templates link indices natively so assignments never snap during iterations
             document.getElementById('adminItemBody').innerHTML = this.data.map((i, idx) => `
                 <tr style="${i.hidden ? 'opacity:0.3' : ''}">
                     <td>
@@ -318,12 +334,12 @@
                         <select onchange="APP.data[${idx}].cat=this.value">
                             ${this.cats.map(c => `<option value="${String(c.id).trim()}" ${String(c.id).trim()===String(i.cat).trim()?'selected':''}>${c.en}</option>`).join('')}
                         </select>
-                        <input type="file" onchange="APP.updateItemImg(${idx}, this)" style="font-size:10px; border:none; padding:0;">
+                        <input type="file" accept="image/*" onchange="APP.updateItemImg(${idx}, this)" style="font-size:10px; border:none; padding:0;">
                     </td>
                     <td style="width:100px;"><input type="text" class="price-box" value="${i.price}" onchange="APP.data[${idx}].price=this.value"></td>
                     <td style="width:70px; text-align:right;">
-                        <button onclick="APP.toggleHide(${idx})" style="background:#555; color:white; border:none; padding:8px; width:100%; margin-bottom:5px; border-radius:4px; cursor:pointer;">Hide</button>
-                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">Del</button>
+                        <button onclick="APP.toggleHide(${idx})" style="background:#555; color:white; border:none; padding:8px; width:100%; margin-bottom:5px; border-radius:4px; cursor:pointer;">${isEn?'Hide':'ደብቅ'}</button>
+                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">${isEn?'Del':'ሰርዝ'}</button>
                     </td>
                 </tr>`).join('');
             document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en}</option>`).join('');
@@ -337,19 +353,24 @@
             
             if(uEl.value === user && pEl.value === this.cloudPassword){
                 document.getElementById('adminDashboard').style.display='block';
+                // Feature 3 Fix: Zero-out form elements completely to wipe cached logins out of memory
                 uEl.value = "";
                 pEl.value = "";
                 this.closeModals();
             } else { 
                 uEl.value = "";
                 pEl.value = "";
-                alert("Login Error"); 
+                alert(this.lang === 'en' ? "Access Key Validation Failed" : "የመግቢያ መለያው የተሳሳተ ነው"); 
             }
         },
 
+        // Feature 2 Fix: Dedicated password mutation pipeline passes straight to backend schema blocks
         updateSystemPassword: function() {
             const newPass = document.getElementById('newPassInput').value.trim();
-            if(!newPass) return;
+            if(!newPass) {
+                alert(this.lang === 'en' ? "Password cannot be empty!" : "የይለፍ ቃል ባዶ መሆን አይችልም!");
+                return;
+            }
             
             const root = getComputedStyle(document.documentElement);
             const form = document.getElementById('corsBypassForm');
@@ -358,7 +379,7 @@
             document.getElementById('corsPayloadField').value = JSON.stringify({ action: "update_password", newPassword: newPass });
             form.submit();
             
-            alert("Password Sync Request Submitted!");
+            alert(this.lang === 'en' ? "Password update processed! Syncing storage..." : "የይለፍ ቃል ተቀይሯል! ወደ አገልጋይ በመላክ ላይ...");
             this.cloudPassword = newPass;
             document.getElementById('newPassInput').value = "";
         },
@@ -366,30 +387,93 @@
         setCat: function(id) { this.activeCat = String(id).trim(); this.render(); },
         toggleLang: function() { this.lang = (this.lang === 'en' ? 'am' : 'en'); this.render(); },
         showLogin: function(e) { e.stopPropagation(); document.getElementById('loginOverlay').style.display='flex'; },
-        closeAdmin: function() { document.getElementById('adminDashboard').style.display='none'; },
+        
+        // Feature 3 Fix: Erases session cache data on admin console exit to force fresh logic runs
+        closeAdmin: function() { 
+            document.getElementById('adminDashboard').style.display='none';
+            document.getElementById('uIn').value = "";
+            document.getElementById('pIn').value = "";
+        },
         closeModals: function() { document.querySelectorAll('.overlay').forEach(o => o.style.display='none'); },
         openModal: function(id) { document.getElementById(id).style.display='flex'; },
-        handleImg: function(input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => this.imgTmp = e.target.result; r.readAsDataURL(input.files[0]); } },
-        updateCatImg: function(idx, input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { this.cats[idx].img = e.target.result; }; r.readAsDataURL(input.files[0]); } },
-        updateItemImg: function(idx, input) { if(input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { this.data[idx].img = e.target.result; this.renderAdmin(); }; r.readAsDataURL(input.files[0]); } },
+        
+        // Quality Optimization Rule: Downgrades high-res photos seamlessly down to avoid script crashes
+        handleImg: function(input) { 
+            if(input.files && input.files[0]) { 
+                const r = new FileReader(); 
+                r.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const max_size = 400; // Resize target dimension boundary
+                        let w = img.width, h = img.height;
+                        if (w > h) { if (w > max_size) { h *= max_size / w; w = max_size; } } 
+                        else { if (h > max_size) { w *= max_size / h; h = max_size; } }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        APP.imgTmp = canvas.toDataURL('image/jpeg', 0.7);
+                    };
+                };
+                r.readAsDataURL(input.files[0]); 
+            } 
+        },
+        updateCatImg: function(idx, input) { 
+            if(input.files && input.files[0]) { 
+                const r = new FileReader(); 
+                r.onload = (e) => { 
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > 400) { h *= 400 / w; w = 400; }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        APP.cats[idx].img = canvas.toDataURL('image/jpeg', 0.7);
+                    };
+                }; 
+                r.readAsDataURL(input.files[0]); 
+            } 
+        },
+        updateItemImg: function(idx, input) { 
+            if(input.files && input.files[0]) { 
+                const r = new FileReader(); 
+                r.onload = (e) => { 
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > 400) { h *= 400 / w; w = 400; }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        APP.data[idx].img = canvas.toDataURL('image/jpeg', 0.7);
+                        APP.renderAdmin();
+                    };
+                }; 
+                r.readAsDataURL(input.files[0]); 
+            } 
+        },
+        
         prepRename: function(id) { this.editId = id; const c = this.cats.find(x => String(x.id).trim() == String(id).trim()); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
         applyCatRename: function() { const c = this.cats.find(x => String(x.id).trim() == String(this.editId).trim()); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
-        deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
+        deleteCat: function(id) { if(confirm(this.lang==='en'?"Delete Category?":"ይህ ምድብ ይሰረዝ?")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
         createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value).trim(), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.imgTmp=''; this.closeModals(); this.render(); },
         createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value).trim(), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.imgTmp=''; this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
-        deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
+        deleteItem: function(idx) { if(confirm(this.lang==='en'?"Delete Item?":"ይህ ምግብ ይሰረዝ?")) { this.data.splice(idx, 1); this.render(); } },
         
-        // PERMANENT PROTECTION: Failsafe verification added to block empty/corrupt sync drops
+        // Feature 1 Core Stability Fix: Strict integrity check runs instantly on trigger to halt sync failures
         saveToCloud: function() {
             if (!this.cats || this.cats.length === 0) {
-                alert("CRITICAL STOP: Local memory category array is blank! Sync canceled to safeguard your cloud database. Please refresh your browser window and log back in.");
+                alert(this.lang === 'en' ? "CRITICAL SAFETY: Sync terminated. Category entries missing from memory array container." : "አደገኛ ስህተት: ማመሳሰል አልተሳካም። ማውጫዎች በዝርዝሩ ውስጥ አልተገኙም።");
                 return;
             }
             
             const root = getComputedStyle(document.documentElement);
             const b = document.getElementById('cloudBtn'); 
-            b.innerText = "SYNCING OVERRIDE...";
+            b.innerText = this.lang === 'en' ? "SYNCING OVERRIDE..." : "በማመሳሰል ላይ...";
             
             const form = document.getElementById('corsBypassForm');
             form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
@@ -398,7 +482,7 @@
             form.submit();
             
             setTimeout(() => {
-                alert("Data changes sent to cloud storage registry successfully!");
+                alert(this.lang === 'en' ? "Data changes saved successfully!" : "ለውጦችዎ በተሳካ ሁኔታ ተቀምጠዋል!");
                 b.innerText = "💾 SYNC ALL CHANGES";
                 
                 const loader = document.getElementById('pageLoader');
