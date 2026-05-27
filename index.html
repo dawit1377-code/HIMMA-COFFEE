@@ -42,8 +42,8 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
 
-        /* Feature 4 Fix: Flexible grid matrix avoids fixed-pixel spacing collisions entirely */
-        .header { background: var(--header-bg); padding: 15px; display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 1000; min-height: 110px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        /* Structurally identical to V12 grid layout but adjusted for removed lang button */
+        .header { background: var(--header-bg); padding: 15px; display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 1000; min-height: 110px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .header-left-menu { cursor: pointer; font-size: 28px; color: white; width: 40px; text-align: center; }
         .logo-container-block { display: flex; align-items: center; justify-content: center; width: 75px; height: 75px; background: rgba(255,255,255,0.05); border-radius: 50%; padding: 3px; }
         .logo-img { height: 100%; width: 100%; object-fit: cover; border-radius: 50%; }
@@ -52,19 +52,19 @@
         .w1 { color: var(--word-1-color); }
         .w2 { color: var(--word-2-color); }
         .w3 { color: var(--word-3-color); }
-        .lang-btn-style { background: white; color: var(--header-bg); border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 13px; justify-self: end; }
         
         .nav-bar { display: flex; overflow-x: auto; padding: 15px 10px; background: var(--nav-bg-color); position: sticky; top: 110px; z-index: 900; border-bottom: 1px solid #eee; min-height: 175px; scrollbar-width: none; gap: 15px; }
         .nav-bar::-webkit-scrollbar { display: none; }
-        .nav-item { text-align: center; min-width: 120px; opacity: 0.5; cursor: pointer; flex-shrink: 0; border-bottom: 4px solid transparent; padding-bottom: 8px; transition: all 0.2s ease; }
+        .nav-item { text-align: center; min-width: 140px; opacity: 0.5; cursor: pointer; flex-shrink: 0; border-bottom: 4px solid transparent; padding-bottom: 8px; transition: all 0.2s ease; }
         .nav-item.active { opacity: 1; font-weight: bold; color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
         .nav-item img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
+        .nav-item p { font-size: 14px; line-height: 1.3; font-weight: 600; }
 
         .container { padding: 15px; width: 100%; max-width: 100%; display: block; box-sizing: border-box; }
         .card { display: flex; align-items: flex-start; background: #ffffff; border-radius: 12px; margin-bottom: 15px; padding: 12px; border: 1px solid #f0f0f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; cursor: pointer; width: 100%; box-sizing: border-box; } 
         .food-img { width: 110px; height: 110px; border-radius: 10px; object-fit: cover; margin-right: 15px; flex-shrink: 0; }
         .food-info-area { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
-        .food-title { color: var(--brand-primary); font-size: 19px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; word-wrap: break-word; }
+        .food-title { color: var(--brand-primary); font-size: 18px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; word-wrap: break-word; }
         .food-ing { font-size: 13px; color: var(--ing-color); font-style: italic; line-height: 1.3; word-wrap: break-word; margin-bottom: 6px; }
         .price-tag { font-weight: bold; color: var(--price-color); font-size: 17px; }
 
@@ -103,9 +103,8 @@
     </div>
     <div class="header-center-area">
         <h1 id="mainTitle"><span class="w1" id="w1"></span> <span class="w2" id="w2"></span> <span class="w3" id="w3"></span></h1>
-        <div id="subTitle" style="font-size:12px; font-weight:bold; letter-spacing:3px; color:#ffffff; margin-top: 2px;">MENU</div>
+        <div id="subTitle" style="font-size:12px; font-weight:bold; letter-spacing:3px; color:#ffffff; margin-top: 2px;">MENU / ማውጫ</div>
     </div>
-    <button class="lang-btn-style" onclick="APP.toggleLang()">EN/አማ</button>
 </header>
 
 <nav class="nav-bar" id="categoryNav"></nav>
@@ -121,11 +120,11 @@
     </div>
 </div>
 
-<a href="#" id="callLink" class="call-order-btn">📞 <span id="callBtnText"></span></a>
+<a href="#" id="callLink" class="call-order-btn">📞 Call To Order (ለማዘዝ ይደውሉ)</a>
 
 <div id="adminDashboard">
     <div style="display:flex; justify-content:space-between; align-items:center; background:var(--header-bg); padding:20px; color:white; border-radius:12px; margin-bottom: 20px;">
-        <h3 style="margin:0;" id="admDashTitle">DIBORA MANAGER</h3>
+        <h3 style="margin:0;" id="admDashTitle">HIMMA COFFEE MANAGER</h3>
         <button onclick="APP.closeAdmin()" style="color:white; border:none; background:none; font-size:40px; cursor:pointer; line-height:1;">&times;</button>
     </div>
     <div class="admin-section">
@@ -152,8 +151,8 @@
     <div class="modal" onclick="event.stopPropagation()" style="text-align:center;">
         <span class="close-x" onclick="APP.closeModals()">&times;</span>
         <h2 style="margin-bottom:15px; color:var(--header-bg); font-size:22px;" id="loginModalTitle">System Authentication</h2>
-        <input type="text" id="uIn" placeholder="User" autocomplete="off">
-        <input type="password" id="pIn" placeholder="Pass" autocomplete="off">
+        <input type="text" id="uIn" placeholder="Username" autocomplete="off">
+        <input type="password" id="pIn" placeholder="Password" autocomplete="off">
         <button id="btnLoginSubmit" onclick="APP.verifyLogin()" class="btn" style="background:var(--header-bg); margin-top:15px;">LOGIN</button>
     </div>
 </div>
@@ -173,7 +172,7 @@
             APP.processIncomingData(response);
         } else {
             console.error("Sheet Response Interrupted");
-            alert(APP.lang === 'en' ? "Sync connection error from Google server. Retrying..." : "ከጉግል አገልጋይ የውሂብ ማመሳሰል ስህተት። እንደገና በመሞከር ላይ...");
+            alert("Sync connection error from Google server. Retrying... (ከጉግል አገልጋይ የውሂብ ማመሳሰል ስህተት።)");
         }
     };
 
@@ -240,43 +239,45 @@
         },
 
         render: function() {
-            const isEn = this.lang === 'en';
             const root = getComputedStyle(document.documentElement);
             
-            document.getElementById('w1').innerText = isEn ? root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, '');
-            document.getElementById('w2').innerText = isEn ? root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
-            document.getElementById('w3').innerText = isEn ? root.getPropertyValue('--hotel-en-3').trim().replace(/"/g, '') : root.getPropertyValue('--hotel-am-3').trim().replace(/"/g, '');
-            document.getElementById('callBtnText').innerText = isEn ? "Call To Order" : "ለማዘዝ ይደውሉ";
+            // Strictly matching requested multi-lingual styling inside headers
+            const engTitle = root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, '') + " " + root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '');
+            const amhTitle = root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, '') + " " + root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
+            document.getElementById('w1').innerText = engTitle;
+            document.getElementById('w2').innerText = " (" + amhTitle + ")";
+            document.getElementById('w3').innerText = "";
 
-            // Feature 5 Fix: Map translation labels across all login views dynamically
-            document.getElementById('loginModalTitle').innerText = isEn ? "System Authentication" : "የስርዓት ማረጋገጫ";
-            document.getElementById('uIn').placeholder = isEn ? "Username" : "የተጠቃሚ ስም";
-            document.getElementById('pIn').placeholder = isEn ? "Password" : "የይለፍ ቃል";
-            document.getElementById('btnLoginSubmit').innerText = isEn ? "LOGIN" : "ግባ";
+            // Structural static placeholders matching V12 definitions 
+            document.getElementById('loginModalTitle').innerText = "System Authentication (የስርዓት ማረጋገጫ)";
+            document.getElementById('uIn').placeholder = "Username (የተጠቃሚ ስም)";
+            document.getElementById('pIn').placeholder = "Password (የይለፍ ቃል)";
+            document.getElementById('btnLoginSubmit').innerText = "LOGIN (ግባ)";
             
-            document.getElementById('admDashTitle').innerText = isEn ? "HIMMA COFFEE MANAGER" : "ሂማ ኮፊ አስተዳዳሪ";
-            document.getElementById('lblCatMgmt').innerText = isEn ? "1. Category Management" : "1. የምድብ አስተዳደር";
-            document.getElementById('btnAddCat').innerText = isEn ? "+ ADD NEW CATEGORY" : "+ አዲስ ምድብ ጨምር";
-            document.getElementById('lblItemMgmt').innerText = isEn ? "2. Menu Items Management" : "2. የምግብ ዝርዝር አስተዳደር";
-            document.getElementById('btnAddItem').innerText = isEn ? "+ ADD NEW FOOD ITEM" : "+ አዲስ ምግብ ጨምር";
-            document.getElementById('lblSecMgmt').innerText = isEn ? "3. Admin Security" : "3. የአስተዳዳሪ ደህንነት";
-            document.getElementById('newPassInput').placeholder = isEn ? "Enter New Password" : "አዲስ የይለፍ ቃል ያስገቡ";
-            document.getElementById('passUpdateBtn').innerText = isEn ? "🔒 UPDATE PASSWORD" : "🔒 የይለፍ ቃል ቀይር";
-            document.getElementById('cloudBtn').innerText = isEn ? "💾 SYNC ALL CHANGES" : "💾 ለውጦችን አመሳስል";
+            document.getElementById('admDashTitle').innerText = "HIMMA COFFEE MANAGER (ሂማ ኮፊ አስተዳዳሪ)";
+            document.getElementById('lblCatMgmt').innerText = "1. Category Management (የምድብ አስተዳደር)";
+            document.getElementById('btnAddCat').innerText = "+ ADD NEW CATEGORY (አዲስ ምድብ ጨምር)";
+            document.getElementById('lblItemMgmt').innerText = "2. Menu Items Management (የምግብ ዝርዝር አስተዳደር)";
+            document.getElementById('btnAddItem').innerText = "+ ADD NEW FOOD ITEM (አዲስ ምግብ ጨምር)";
+            document.getElementById('lblSecMgmt').innerText = "3. Admin Security (የአስተዳዳሪ ደህንነት)";
+            document.getElementById('newPassInput').placeholder = "Enter New Password (አዲስ የይለፍ ቃል ያስገቡ)";
+            document.getElementById('passUpdateBtn').innerText = "🔒 UPDATE PASSWORD (የይለፍ ቃል ቀይር)";
+            document.getElementById('cloudBtn').innerText = "💾 SYNC ALL CHANGES (ለውጦችን አመሳስል)";
 
-            document.getElementById('lblRenameCat').innerText = isEn ? "Rename Category" : "ምድብ ስም ቀይር";
-            document.getElementById('btnSaveRename').innerText = isEn ? "SAVE RENAME" : "ለውጡን አስቀምጥ";
-            document.getElementById('lblNewCatTitle').innerText = isEn ? "New Category" : "አዲስ ምድብ";
-            document.getElementById('lblCatImgFile').innerText = isEn ? "Category Icon Image File:" : "የምድብ ምስል ፋይል:";
-            document.getElementById('btnCreateCat').innerText = isEn ? "CREATE CATEGORY" : "ምድብ ፍጠር";
-            document.getElementById('lblAddItemTitle').innerText = isEn ? "Add New Item" : "አዲስ ምግብ ማውጫ";
-            document.getElementById('lblItemImgFile').innerText = isEn ? "Food Display Image File:" : "የምግቡ ምስል ፋይል:";
-            document.getElementById('btnCreateItem').innerText = isEn ? "ADD TO MENU LIST" : "ወደ ምግብ ዝርዝር ጨምር";
+            document.getElementById('lblRenameCat').innerText = "Rename Category (ምድብ ስም ቀይር)";
+            document.getElementById('btnSaveRename').innerText = "SAVE RENAME (ለውጡን አስቀምጥ)";
+            document.getElementById('lblNewCatTitle').innerText = "New Category (አዲስ ምድብ)";
+            document.getElementById('lblCatImgFile').innerText = "Category Icon Image File (የምድብ ምስል ፋይል):";
+            document.getElementById('btnCreateCat').innerText = "CREATE CATEGORY (ምድብ ፍጠር)";
+            document.getElementById('lblAddItemTitle').innerText = "Add New Item (አዲስ ምግብ ማውጫ)";
+            document.getElementById('lblItemImgFile').innerText = "Food Display Image File (የምግቡ ምስል ፋይል):";
+            document.getElementById('btnCreateItem').innerText = "ADD TO MENU LIST (ወደ ምግብ ዝርዝር ጨምር)";
 
+            // Render navigation elements with brackets
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
                 <div class="nav-item ${String(this.activeCat).trim() === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${String(c.id).trim()}')">
                     <img src="${c.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
-                    <p>${isEn ? c.en : c.am}</p>
+                    <p>${c.en} <span style="display:block; font-size:12px; opacity:0.8; font-weight:normal;">(${c.am})</span></p>
                 </div>`).join('');
 
             const filtered = this.data.filter(i => String(i.cat).trim() === String(this.activeCat).trim() && !i.hidden);
@@ -284,14 +285,14 @@
             if (filtered.length === 0) {
                 document.getElementById('menuListing').innerHTML = `
                 <div style="text-align:center; padding: 40px 20px; color: #888; width:100%;">
-                    <p style="font-size:16px;">${isEn ? 'No items found under this category right now.' : 'በዚህ ምድብ ውስጥ በአሁኑ ጊዜ ምንም ዕቃዎች አልተገኙም።'}</p>
+                    <p style="font-size:16px;">No items found under this category right now. (በዚህ ምድብ ውስጥ ምንም ዕቃዎች አልተገኙም)</p>
                 </div>`;
             } else {
                 document.getElementById('menuListing').innerHTML = filtered.map(i => `
                     <div class="card" onclick="APP.openDetail('${i.id}')">
                         <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
                         <div class="food-info-area">
-                            <div class="food-title">${isEn ? i.en : i.am}</div>
+                            <div class="food-title">${i.en} <span style="font-size:15px; color:#666; font-weight:normal;">(${i.am})</span></div>
                             <div class="food-ing">${i.ing || ''}</div>
                             <div class="price-tag">${i.price} ETB</div>
                         </div>
@@ -304,7 +305,7 @@
             const item = this.data.find(i => String(i.id) === String(id));
             if(!item) return;
             document.getElementById('modalImgHD').src = item.img || '';
-            document.getElementById('modalTitle').innerText = this.lang === 'en' ? item.en : item.am;
+            document.getElementById('modalTitle').innerText = item.en + " (" + item.am + ")";
             document.getElementById('modalIng').innerText = item.ing || '';
             document.getElementById('modalPrice').innerText = item.price + " ETB";
             document.getElementById('itemDetailModal').style.display = 'flex';
@@ -312,19 +313,17 @@
         closeDetail: function() { document.getElementById('itemDetailModal').style.display = 'none'; },
 
         renderAdmin: function() {
-            const isEn = this.lang === 'en';
             document.getElementById('adminCatList').innerHTML = this.cats.map((c, idx) => `
                 <div class="cat-row">
-                    <div class="cat-info"><span><b>${c.en}</b> / ${c.am}</span>
+                    <div class="cat-info"><span><b>${c.en}</b> (${c.am})</span>
                         <div>
-                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">${isEn?'Rename':'ስም ቀይር'}</button>
-                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">${isEn?'Del':'ሰርዝ'}</button>
+                            <button onclick="APP.prepRename('${String(c.id).trim()}')" style="background:#3498db; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Rename (ስም ቀይር)</button>
+                            <button onclick="APP.deleteCat('${String(c.id).trim()}')" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer;">Del (ሰርዝ)</button>
                         </div>
                     </div>
                     <input type="file" accept="image/*" onchange="APP.updateCatImg(${idx}, this)">
                 </div>`).join('');
 
-            // Feature 1 Core Fix: Select templates link indices natively so assignments never snap during iterations
             document.getElementById('adminItemBody').innerHTML = this.data.map((i, idx) => `
                 <tr style="${i.hidden ? 'opacity:0.3' : ''}">
                     <td>
@@ -332,17 +331,17 @@
                         <input value="${i.am}" onchange="APP.data[${idx}].am=this.value" placeholder="AM Title">
                         <input value="${i.ing || ''}" onchange="APP.data[${idx}].ing=this.value" style="font-size:11px;" placeholder="Details">
                         <select onchange="APP.data[${idx}].cat=this.value">
-                            ${this.cats.map(c => `<option value="${String(c.id).trim()}" ${String(c.id).trim()===String(i.cat).trim()?'selected':''}>${c.en}</option>`).join('')}
+                            ${this.cats.map(c => `<option value="${String(c.id).trim()}" ${String(c.id).trim()===String(i.cat).trim()?'selected':''}>${c.en} (${c.am})</option>`).join('')}
                         </select>
                         <input type="file" accept="image/*" onchange="APP.updateItemImg(${idx}, this)" style="font-size:10px; border:none; padding:0;">
                     </td>
                     <td style="width:100px;"><input type="text" class="price-box" value="${i.price}" onchange="APP.data[${idx}].price=this.value"></td>
                     <td style="width:70px; text-align:right;">
-                        <button onclick="APP.toggleHide(${idx})" style="background:#555; color:white; border:none; padding:8px; width:100%; margin-bottom:5px; border-radius:4px; cursor:pointer;">${isEn?'Hide':'ደብቅ'}</button>
-                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">${isEn?'Del':'ሰርዝ'}</button>
+                        <button onclick="APP.toggleHide(${idx})" style="background:#555; color:white; border:none; padding:8px; width:100%; margin-bottom:5px; border-radius:4px; cursor:pointer;">${i.hidden?'Show':'Hide'}</button>
+                        <button onclick="APP.deleteItem(${idx})" style="background:red; color:white; border:none; padding:8px; width:100%; border-radius:4px; cursor:pointer;">Del (ሰርዝ)</button>
                     </td>
                 </tr>`).join('');
-            document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en}</option>`).join('');
+            document.getElementById('nItemCat').innerHTML = this.cats.map(c => `<option value="${String(c.id).trim()}">${c.en} (${c.am})</option>`).join('');
         },
 
         verifyLogin: function() {
@@ -353,22 +352,20 @@
             
             if(uEl.value === user && pEl.value === this.cloudPassword){
                 document.getElementById('adminDashboard').style.display='block';
-                // Feature 3 Fix: Zero-out form elements completely to wipe cached logins out of memory
                 uEl.value = "";
                 pEl.value = "";
                 this.closeModals();
             } else { 
                 uEl.value = "";
                 pEl.value = "";
-                alert(this.lang === 'en' ? "Access Key Validation Failed" : "የመግቢያ መለያው የተሳሳተ ነው"); 
+                alert("Access Key Validation Failed (የመግቢያ መለያው የተሳሳተ ነው)"); 
             }
         },
 
-        // Feature 2 Fix: Dedicated password mutation pipeline passes straight to backend schema blocks
         updateSystemPassword: function() {
             const newPass = document.getElementById('newPassInput').value.trim();
             if(!newPass) {
-                alert(this.lang === 'en' ? "Password cannot be empty!" : "የይለፍ ቃል ባዶ መሆን አይችልም!");
+                alert("Password cannot be empty! (የይለፍ ቃል ባዶ መሆን አይችልም!)");
                 return;
             }
             
@@ -379,16 +376,15 @@
             document.getElementById('corsPayloadField').value = JSON.stringify({ action: "update_password", newPassword: newPass });
             form.submit();
             
-            alert(this.lang === 'en' ? "Password update processed! Syncing storage..." : "የይለፍ ቃል ተቀይሯል! ወደ አገልጋይ በመላክ ላይ...");
+            alert("Password update processed! Syncing storage... (የይለፍ ቃል ተቀይሯል! ወደ አገልጋይ በመላክ ላይ...)");
             this.cloudPassword = newPass;
             document.getElementById('newPassInput').value = "";
         },
 
         setCat: function(id) { this.activeCat = String(id).trim(); this.render(); },
-        toggleLang: function() { this.lang = (this.lang === 'en' ? 'am' : 'en'); this.render(); },
+        toggleLang: function() { /* No-Op in layout V13 to strictly safeguard V12 functions */ },
         showLogin: function(e) { e.stopPropagation(); document.getElementById('loginOverlay').style.display='flex'; },
         
-        // Feature 3 Fix: Erases session cache data on admin console exit to force fresh logic runs
         closeAdmin: function() { 
             document.getElementById('adminDashboard').style.display='none';
             document.getElementById('uIn').value = "";
@@ -397,83 +393,60 @@
         closeModals: function() { document.querySelectorAll('.overlay').forEach(o => o.style.display='none'); },
         openModal: function(id) { document.getElementById(id).style.display='flex'; },
         
-        // Quality Optimization Rule: Downgrades high-res photos seamlessly down to avoid script crashes
         handleImg: function(input) { 
             if(input.files && input.files[0]) { 
-                const r = new FileReader(); 
-                r.onload = (e) => {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const max_size = 400; // Resize target dimension boundary
-                        let w = img.width, h = img.height;
-                        if (w > h) { if (w > max_size) { h *= max_size / w; w = max_size; } } 
-                        else { if (h > max_size) { w *= max_size / h; h = max_size; } }
-                        canvas.width = w; canvas.height = h;
-                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const r = new FileReader(); r.onload = (e) => {
+                    const img = new Image(); img.src = e.target.result; img.onload = () => {
+                        const canvas = document.createElement('canvas'); const max_size = 400; let w = img.width, h = img.height;
+                        if (w > h) { if (w > max_size) { h *= max_size / w; w = max_size; } } else { if (h > max_size) { w *= max_size / h; h = max_size; } }
+                        canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                         APP.imgTmp = canvas.toDataURL('image/jpeg', 0.7);
                     };
-                };
-                r.readAsDataURL(input.files[0]); 
+                }; r.readAsDataURL(input.files[0]); 
             } 
         },
         updateCatImg: function(idx, input) { 
             if(input.files && input.files[0]) { 
-                const r = new FileReader(); 
-                r.onload = (e) => { 
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height;
-                        if (w > 400) { h *= 400 / w; w = 400; }
-                        canvas.width = w; canvas.height = h;
+                const r = new FileReader(); r.onload = (e) => { 
+                    const img = new Image(); img.src = e.target.result; img.onload = () => {
+                        const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
+                        if (w > 400) { h *= 400 / w; w = 400; } canvas.width = w; canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                         APP.cats[idx].img = canvas.toDataURL('image/jpeg', 0.7);
                     };
-                }; 
-                r.readAsDataURL(input.files[0]); 
+                }; r.readAsDataURL(input.files[0]); 
             } 
         },
         updateItemImg: function(idx, input) { 
             if(input.files && input.files[0]) { 
-                const r = new FileReader(); 
-                r.onload = (e) => { 
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height;
-                        if (w > 400) { h *= 400 / w; w = 400; }
-                        canvas.width = w; canvas.height = h;
+                const r = new FileReader(); r.onload = (e) => { 
+                    const img = new Image(); img.src = e.target.result; img.onload = () => {
+                        const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
+                        if (w > 400) { h *= 400 / w; w = 400; } canvas.width = w; canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        APP.data[idx].img = canvas.toDataURL('image/jpeg', 0.7);
-                        APP.renderAdmin();
+                        APP.data[idx].img = canvas.toDataURL('image/jpeg', 0.7); APP.renderAdmin();
                     };
-                }; 
-                r.readAsDataURL(input.files[0]); 
+                }; r.readAsDataURL(input.files[0]); 
             } 
         },
         
         prepRename: function(id) { this.editId = id; const c = this.cats.find(x => String(x.id).trim() == String(id).trim()); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
         applyCatRename: function() { const c = this.cats.find(x => String(x.id).trim() == String(this.editId).trim()); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
-        deleteCat: function(id) { if(confirm(this.lang==='en'?"Delete Category?":"ይህ ምድብ ይሰረዝ?")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
+        deleteCat: function(id) { if(confirm("Delete Category? (ይህ ምድብ ይሰረዝ?)")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
         createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value).trim(), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.imgTmp=''; this.closeModals(); this.render(); },
         createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value).trim(), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.imgTmp=''; this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
-        deleteItem: function(idx) { if(confirm(this.lang==='en'?"Delete Item?":"ይህ ምግብ ይሰረዝ?")) { this.data.splice(idx, 1); this.render(); } },
+        deleteItem: function(idx) { if(confirm("Delete Item? (ይህ ምግብ ይሰረዝ?)")) { this.data.splice(idx, 1); this.render(); } },
         
-        // Feature 1 Core Stability Fix: Strict integrity check runs instantly on trigger to halt sync failures
         saveToCloud: function() {
             if (!this.cats || this.cats.length === 0) {
-                alert(this.lang === 'en' ? "CRITICAL SAFETY: Sync terminated. Category entries missing from memory array container." : "አደገኛ ስህተት: ማመሳሰል አልተሳካም። ማውጫዎች በዝርዝሩ ውስጥ አልተገኙም።");
+                alert("CRITICAL SAFETY: Sync terminated. Category entries missing from memory array container.");
                 return;
             }
             
             const root = getComputedStyle(document.documentElement);
             const b = document.getElementById('cloudBtn'); 
-            b.innerText = this.lang === 'en' ? "SYNCING OVERRIDE..." : "በማመሳሰል ላይ...";
+            b.innerText = "SYNCING OVERRIDE (በማመሳሰል ላይ)...";
             
             const form = document.getElementById('corsBypassForm');
             form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
@@ -482,7 +455,7 @@
             form.submit();
             
             setTimeout(() => {
-                alert(this.lang === 'en' ? "Data changes saved successfully!" : "ለውጦችዎ በተሳካ ሁኔታ ተቀምጠዋል!");
+                alert("Data changes saved successfully! (ለውጦችዎ በተሳካ ሁኔታ ተቀምጠዋል!)");
                 b.innerText = "💾 SYNC ALL CHANGES";
                 
                 const loader = document.getElementById('pageLoader');
