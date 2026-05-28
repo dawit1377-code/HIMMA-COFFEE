@@ -312,7 +312,7 @@
                 </div>`;
             } else {
                 document.getElementById('menuListing').innerHTML = filtered.map(i => `
-                    <div class="card" onclick="APP.openDetail('${i.id}')">
+                    <div class="card" onclick="APP.openDetail('${String(i.id).trim()}')">
                         <img src="${i.img || ''}" class="food-img" onerror="this.src='https://via.placeholder.com/150'">
                         <div class="food-info-area">
                             <div class="food-title" style="color: ${colorPrimary};">
@@ -328,7 +328,7 @@
         },
 
         openDetail: function(id) {
-            const item = this.data.find(i => String(i.id) === String(id));
+            const item = this.data.find(i => String(i.id).trim() === String(id).trim());
             if(!item) return;
             const root = getComputedStyle(document.documentElement);
             
@@ -455,51 +455,95 @@
                         const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
                         if (w > 400) { h *= 400 / w; w = 400; } canvas.width = w; canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        APP.data[idx].img = canvas.toDataURL('image/jpeg', 0.7); APP.renderAdmin();
+                        APP.data[idx].img = canvas.toDataURL('image/jpeg', 0.7);
                     };
                 }; r.readAsDataURL(input.files[0]); 
             } 
         },
-        
-        prepRename: function(id) { this.editId = id; const c = this.cats.find(x => String(x.id).trim() == String(id).trim()); if(c){ document.getElementById('eCatEn').value=c.en; document.getElementById('eCatAm').value=c.am; this.openModal('editCatModal'); } },
-        applyCatRename: function() { const c = this.cats.find(x => String(x.id).trim() == String(this.editId).trim()); if(c){ c.en=document.getElementById('eCatEn').value; c.am=document.getElementById('eCatAm').value; this.closeModals(); this.render(); } },
-        deleteCat: function(id) { if(confirm("Delete Category?")) { this.cats = this.cats.filter(c => String(c.id).trim() != String(id).trim()); this.render(); } },
-        createNewCat: function() { this.cats.push({id:String(document.getElementById('nCatId').value).trim(), en:document.getElementById('nCatEn').value, am:document.getElementById('nCatAm').value, img:this.imgTmp}); this.imgTmp=''; this.closeModals(); this.render(); },
-        createNewItem: function() { this.data.push({id:"item_" + new Date().getTime(), cat:String(document.getElementById('nItemCat').value).trim(), en:document.getElementById('nItemEn').value, am:document.getElementById('nItemAm').value, ing:document.getElementById('nItemIng').value, price:document.getElementById('nItemPrice').value, img:this.imgTmp, hidden:false}); this.imgTmp=''; this.closeModals(); this.render(); },
         toggleHide: function(idx) { this.data[idx].hidden = !this.data[idx].hidden; this.render(); },
-        deleteItem: function(idx) { if(confirm("Delete Item?")) { this.data.splice(idx, 1); this.render(); } },
-        
-        saveToCloud: function() {
-            if (!this.cats || this.cats.length === 0) {
-                alert("CRITICAL SAFETY: Sync terminated. Category entries missing from memory array container.");
-                return;
-            }
-            
-            const root = getComputedStyle(document.documentElement);
-            const b = document.getElementById('cloudBtn'); 
-            b.innerText = "SYNCING OVERRIDE...";
-            
-            const form = document.getElementById('corsBypassForm');
-            form.action = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
-            
-            document.getElementById('corsPayloadField').value = JSON.stringify({ items: this.data, cats: this.cats });
-            form.submit();
-            
-            setTimeout(() => {
-                alert("Data changes saved successfully!");
-                b.innerText = "💾 SYNC ALL CHANGES";
-                
-                const loader = document.getElementById('pageLoader');
-                if(loader) {
-                    loader.style.opacity = '1';
-                    loader.style.display = 'flex';
-                }
-                APP.init();
-            }, 2500);
+        deleteItem: function(idx) { if(confirm("Delete this item?")) { this.data.splice(idx, 1); this.render(); } },
+        prepRename: function(id) {
+            const c = this.cats.find(cat => String(cat.id).trim() === String(id).trim());
+            if(!c) return;
+            this.editId = id;
+            document.getElementById('eCatEn').value = c.en;
+            document.getElementById('eCatAm').value = c.am;
+            this.openModal('editCatModal');
         },
-        closeOnOutside: function(e) { if(e.target.className==='overlay') this.closeModals(); }
+        applyCatRename: function() {
+            const c = this.cats.find(cat => String(cat.id).trim() === String(this.editId).trim());
+            if(c) {
+                c.en = document.getElementById('eCatEn').value.trim();
+                c.am = document.getElementById('eCatAm').value.trim();
+                this.render();
+                this.closeModals();
+            }
+        },
+        deleteCat: function(id) {
+            if(confirm("Delete category and all its items?")) {
+                this.cats = this.cats.filter(c => String(c.id).trim() !== String(id).trim());
+                this.data = this.data.filter(i => String(i.cat).trim() !== String(id).trim());
+                if(String(this.activeCat).trim() === String(id).trim() && this.cats.length > 0) {
+                    this.activeCat = String(this.cats[0].id).trim();
+                }
+                this.render();
+            }
+        },
+        createNewCat: function() {
+            const id = document.getElementById('nCatId').value.trim();
+            const en = document.getElementById('nCatEn').value.trim();
+            const am = document.getElementById('nCatAm').value.trim();
+            if(!id || !en || !am) { alert("Fill all fields!"); return; }
+            if(this.cats.some(c => String(c.id).trim() === String(id).trim())) { alert("ID already exists!"); return; }
+            this.cats.push({ id: id, en: en, am: am, img: this.imgTmp });
+            this.imgTmp = '';
+            document.getElementById('nCatId').value='';
+            document.getElementById('nCatEn').value='';
+            document.getElementById('nCatAm').value='';
+            this.render();
+            this.closeModals();
+        },
+        createNewItem: function() {
+            const cat = document.getElementById('nItemCat').value;
+            const en = document.getElementById('nItemEn').value.trim();
+            const am = document.getElementById('nItemAm').value.trim();
+            const ing = document.getElementById('nItemIng').value.trim();
+            const price = document.getElementById('nItemPrice').value.trim();
+            if(!en || !am || !price) { alert("Fill required fields!"); return; }
+            const newId = "item_" + new Date().getTime();
+            this.data.push({ id: newId, cat: cat, en: en, am: am, ing: ing, price: price, img: this.imgTmp, hidden: false });
+            this.imgTmp = '';
+            document.getElementById('nItemEn').value='';
+            document.getElementById('nItemAm').value='';
+            document.getElementById('nItemIng').value='';
+            document.getElementById('nItemPrice').value='';
+            this.render();
+            this.closeModals();
+        },
+        closeOnOutside: function(e) {
+            if(e.target.classList.contains('overlay')) { this.closeModals(); }
+        },
+        saveToCloud: function() {
+            const root = getComputedStyle(document.documentElement);
+            const url = root.getPropertyValue('--google-sheet-url').trim().replace(/"/g, '');
+            const form = document.getElementById('corsBypassForm');
+            form.action = url;
+            
+            const payload = {
+                action: "sync_all",
+                password: this.cloudPassword,
+                cats: this.cats,
+                items: this.data
+            };
+            
+            document.getElementById('corsPayloadField').value = JSON.stringify(payload);
+            form.submit();
+            alert("Sync command sent to Google Sheets! Refreshing data view in 3 seconds...");
+            setTimeout(() => { this.init(); }, 3000);
+        }
     };
-    window.onload = () => APP.init();
+
+    window.onload = function() { APP.init(); };
 </script>
 </body>
 </html>
