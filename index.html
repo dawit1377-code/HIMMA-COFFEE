@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght=700&family=Poppins:wght=400;600&family=Noto+Sans+Ethiopic:wght=400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PASTE YOUR LATEST DEPLOYED GOOGLE APPS Script EXECUTION LINK STRING DIRECTLY BELOW */
+            /* PASTE YOUR LATEST DEPLOYED GOOGLE APPS SCRIPT EXECUTION LINK STRING DIRECTLY BELOW */
             --google-sheet-url: "https://script.google.com/macros/s/AKfycbzn-LocweeJ-muUeM0YSchXexILs-qU3HNalfuNpuNWX7EkH5uU0pnStYM9vBmgAUkE/exec";
             
             --welcome-title-color: #0B7143;
@@ -20,7 +20,7 @@
             --hotel-am-3: "";
             --word-1-color: #0B7143;
             --word-2-color: #74271D;
-            --word-3-color: #; 
+            --word-3-color: #74271D; 
             --nav-bg-color: #ffffff;
             --call-btn-color: #0B7143;
             --header-bg: #2A1B17;
@@ -42,14 +42,12 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
 
-        /* Correction 1: Shifted to relative positioning with absolute menu alignment to perfectly center the logo & texts to the absolute center screen line */
         .header { background: var(--header-bg); padding: 15px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 1000; min-height: 125px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; }
         .header-left-menu { cursor: pointer; font-size: 28px; color: white; position: absolute; left: 15px; width: 40px; text-align: center; }
         .logo-container-block { display: flex; align-items: center; justify-content: center; width: 75px; height: 75px; background: rgba(255,255,255,0.05); border-radius: 50%; padding: 3px; margin-right: 12px; }
         .logo-img { height: 100%; width: 100%; object-fit: cover; border-radius: 50%; }
         .header-center-area { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
         
-        /* Linked to variable colors inside JS template parsing engine */
         .header h1 { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 800; line-height: 1.2; word-break: break-word; }
         .w1 { color: var(--word-1-color); }
         .w2 { color: var(--word-2-color); }
@@ -62,7 +60,6 @@
         .nav-item.active { opacity: 1; font-weight: bold; color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
         .nav-item img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
         
-        /* Correction 3: Increased font size and locked both languages to bold inside categories */
         .nav-item p { font-size: 16px; line-height: 1.3; font-weight: 700; color: #111111; }
         .nav-cat-amh { display: block; font-size: 14px; font-weight: 700; opacity: 0.95; margin-top: 2px; font-family: 'Noto Sans Ethiopic', sans-serif; }
 
@@ -249,7 +246,6 @@
         render: function() {
             const root = getComputedStyle(document.documentElement);
             
-            // Correction 2: Pulling hex values directly from the configuration file so edits reflect immediately
             const colorW1 = root.getPropertyValue('--word-1-color').trim();
             const colorW2 = root.getPropertyValue('--word-2-color').trim();
             const colorW3 = root.getPropertyValue('--word-3-color').trim();
@@ -260,7 +256,6 @@
             const engTitle = root.getPropertyValue('--hotel-en-1').trim().replace(/"/g, '') + " " + root.getPropertyValue('--hotel-en-2').trim().replace(/"/g, '');
             const amhTitle = root.getPropertyValue('--hotel-am-1').trim().replace(/"/g, '') + " " + root.getPropertyValue('--hotel-am-2').trim().replace(/"/g, '');
             
-            // Correction 1 & 2: Center-aligned stacking using active color styling strings
             const elW1 = document.getElementById('w1');
             elW1.innerText = engTitle;
             elW1.style.color = colorW1;
@@ -270,7 +265,6 @@
             
             document.getElementById('w3').innerText = "";
 
-            // Correction 3: Admin Box Layout matching precisely
             document.getElementById('loginModalTitle').innerHTML = `Welcome to "${engTitle}" Admin Page<br><span style="display:block; font-size:16px; font-weight:bold; color:#666; margin-top:6px; font-family:'Noto Sans Ethiopic';">እንኳን ወደ "${amhTitle}" አስተዳዳሪ ገጽ በደህና መጡ</span>`;
             
             document.getElementById('uIn').placeholder = "Username (የተጠቃሚ ስም)";
@@ -296,7 +290,6 @@
             document.getElementById('lblItemImgFile').innerText = "Food Display Image File (የምግቡ ምስል ፋይል):";
             document.getElementById('btnCreateItem').innerText = "ADD TO MENU LIST (ወደ ምግብ ዝርዝር ጨምር)";
 
-            // Correction 3: Categories updated to make both titles bold and scaled up cleanly
             document.getElementById('categoryNav').innerHTML = this.cats.map(c => `
                 <div class="nav-item ${String(this.activeCat).trim() === String(c.id).trim() ? 'active' : ''}" onclick="APP.setCat('${String(c.id).trim()}')">
                     <img src="${c.img || ''}" onerror="this.src='https://via.placeholder.com/150'">
