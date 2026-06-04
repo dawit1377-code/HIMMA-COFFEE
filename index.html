@@ -38,6 +38,11 @@
         #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; transition: opacity 0.4s ease; }
         .loader-welcome-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--welcome-title-color); margin-bottom: 4px; }
         .loader-welcome-subtitle { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 18px; font-weight: 700; color: var(--welcome-subtitle-color); margin-bottom: 30px; }
+        
+        /* Loading Page Logo Layout Styling */
+        .loader-logo-container { width: 100px; height: 100px; background: rgba(0,0,0,0.05); border-radius: 50%; padding: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+        .loader-logo-img { height: 100%; width: 100%; object-fit: cover; border-radius: 50%; }
+
         .spinner { width: 45px; height: 45px; border: 5px solid #eee; border-top: 5px solid var(--brand-primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .progress-text { font-size: 24px; font-weight: 700; color: var(--brand-primary); margin-top: 15px; font-family: 'Poppins', sans-serif; }
@@ -97,6 +102,10 @@
 <body onclick="APP.closeOnOutside(event)">
 
 <div id="pageLoader">
+    <div class="loader-logo-container">
+        <img src="logo.jpg" class="loader-logo-img" alt="Logo" onerror="this.style.display='none'; document.getElementById('loaderLogoFallback').style.display='flex'">
+        <div id="loaderLogoFallback" style="display:none; height:80px; width:80px; background: rgba(0,0,0,0.05); border-radius: 50%; align-items: center; justify-content: center; font-size: 32px;">☕</div>
+    </div>
     <h2 class="loader-welcome-title">Welcome To Himma Coffee</h2>
     <h3 class="loader-welcome-subtitle">እንኳን ወደ ሂማ ቡና በደህና መጡ</h3>
     <div class="spinner"></div>
